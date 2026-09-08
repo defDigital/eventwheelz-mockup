@@ -30,3 +30,6 @@ pnpm-debug.log*
 dist-zip/
 dist-publiceer/
 *.zip
+
+# oude, vervallen mockups — blijven lokaal staan
+_archief/

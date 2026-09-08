@@ -10,7 +10,7 @@
     "check": "node scripts/check-links.mjs",
     "verify": "astro build && node scripts/check-links.mjs && node scripts/audit.mjs",
     "zip": "npm run verify && node scripts/maak-zip.mjs",
-    "publiceer": "SITE_URL=https://kasper0599.github.io/eventwheelz-mockup npm run verify && node scripts/publiceer.mjs"
+    "publiceer": "SITE_URL=https://defdigital.github.io/eventwheelz-mockup npm run verify && node scripts/publiceer.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
