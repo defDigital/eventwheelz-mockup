@@ -1,0 +1,27 @@
+---
+interface Props { titel?: string; eyebrow?: string; cijfers: { getal: string; label: string }[]; }
+const { titel, eyebrow, cijfers } = Astro.props;
+---
+<section class="section is-band">
+  <div class="wrap">
+    {(eyebrow || titel) && (
+      <div class="section-head">
+        {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+        {titel && <h2>{titel}</h2>}
+      </div>
+    )}
+    <div class="cijfers">
+      {cijfers.map((c) => (
+        <div class="stat">
+          <span class="stat-num" data-dummy>{c.getal}</span>
+          <span class="stat-label">{c.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cijfers{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-6);}
+  @media (max-width:767px){ .cijfers{grid-template-columns:1fr;gap:var(--s-5);} }
+</style>

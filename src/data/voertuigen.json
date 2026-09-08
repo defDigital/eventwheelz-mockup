@@ -5,7 +5,8 @@
     "slug": "e-choppers",
     "kort": "Snel en wendbaar over grote terreinen. De favoriet voor crewvervoer backstage.",
     "lang": [
-      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."
+      "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+      "Deze alinea is met opzet iets langer, zodat je kunt zien wat er gebeurt als een blok meer tekst krijgt dan gemiddeld. De echte tekst schrijven we pas als de vormgeving vaststaat."
     ],
     "vanafprijs": 45,
     "prijsEenheid": "per dag",
@@ -24,7 +25,26 @@
     "inzet": [
       "crew-mobility"
     ],
-    "volgorde": 1
+    "volgorde": 1,
+    "payoff": "De snelste manier om je crew over een groot terrein te verplaatsen.",
+    "faq": [
+      {
+        "vraag": "Hoeveel E-Choppers kan ik minimaal huren?",
+        "antwoord": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit."
+      },
+      {
+        "vraag": "Wat gebeurt er als een accu leeg raakt?",
+        "antwoord": "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten."
+      },
+      {
+        "vraag": "Is er een rijbewijs nodig?",
+        "antwoord": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit."
+      },
+      {
+        "vraag": "Kunnen ze in onze huisstijl gewrapt worden?",
+        "antwoord": "Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later."
+      }
+    ]
   },
   {
     "id": "e-fatbikes-e-steps",
@@ -32,7 +52,8 @@
     "slug": "e-fatbikes-e-steps",
     "kort": "Compact, stil en zonder rijbewijs te gebruiken. Ideaal voor korte ritten op het terrein.",
     "lang": [
-      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."
+      "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+      "Deze alinea is met opzet iets langer, zodat je kunt zien wat er gebeurt als een blok meer tekst krijgt dan gemiddeld. De echte tekst schrijven we pas als de vormgeving vaststaat."
     ],
     "vanafprijs": 35,
     "prijsEenheid": "per dag",
@@ -51,7 +72,26 @@
     "inzet": [
       "crew-mobility"
     ],
-    "volgorde": 2
+    "volgorde": 2,
+    "payoff": "Stil, compact en zonder rijbewijs. Overal inzetbaar.",
+    "faq": [
+      {
+        "vraag": "Wat is het verschil tussen een E-Fatbike en een E-Step?",
+        "antwoord": "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten."
+      },
+      {
+        "vraag": "Hoeveel ruimte hebben ze nodig op het terrein?",
+        "antwoord": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit."
+      },
+      {
+        "vraag": "Zijn helmen inbegrepen?",
+        "antwoord": "Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later."
+      },
+      {
+        "vraag": "Kan ik ze combineren met E-Choppers?",
+        "antwoord": "Deze korte tekst laat zien hoeveel ruimte er is. Nog niet definitief."
+      }
+    ]
   },
   {
     "id": "tuktuks",
@@ -59,7 +99,8 @@
     "slug": "tuktuks",
     "kort": "Comfortabel groepsvervoer met karakter. Perfect als pendeldienst of voor gastenvervoer.",
     "lang": [
-      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."
+      "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+      "Deze alinea is met opzet iets langer, zodat je kunt zien wat er gebeurt als een blok meer tekst krijgt dan gemiddeld. De echte tekst schrijven we pas als de vormgeving vaststaat."
     ],
     "vanafprijs": 330,
     "prijsEenheid": "per dag",
@@ -80,7 +121,26 @@
       "people-mobility",
       "branded-mobility"
     ],
-    "volgorde": 3
+    "volgorde": 3,
+    "payoff": "Groepsvervoer waar mensen een foto van maken.",
+    "faq": [
+      {
+        "vraag": "Hoeveel personen passen er in een TukTuk?",
+        "antwoord": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit."
+      },
+      {
+        "vraag": "Rijden jullie zelf of levert u een chauffeur?",
+        "antwoord": "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten."
+      },
+      {
+        "vraag": "Kan een TukTuk als pendeldienst worden ingezet?",
+        "antwoord": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit."
+      },
+      {
+        "vraag": "Kan de TukTuk volledig gewrapt worden?",
+        "antwoord": "Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later."
+      }
+    ]
   },
   {
     "id": "topolinos",
@@ -88,7 +148,8 @@
     "slug": "topolinos",
     "kort": "Compact en stijlvol vervoer met VIP-uitstraling. Ons meest gevraagde canvas voor een wrap.",
     "lang": [
-      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."
+      "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+      "Deze alinea is met opzet iets langer, zodat je kunt zien wat er gebeurt als een blok meer tekst krijgt dan gemiddeld. De echte tekst schrijven we pas als de vormgeving vaststaat."
     ],
     "vanafprijs": 125,
     "prijsEenheid": "per dag",
@@ -107,6 +168,25 @@
       "people-mobility",
       "branded-mobility"
     ],
-    "volgorde": 4
+    "volgorde": 4,
+    "payoff": "Klein, opvallend en het beste canvas voor een wrap.",
+    "faq": [
+      {
+        "vraag": "Hoeveel personen passen er in een Topolino?",
+        "antwoord": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit."
+      },
+      {
+        "vraag": "Is een rijbewijs nodig?",
+        "antwoord": "Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later."
+      },
+      {
+        "vraag": "Hoe lang duurt het wrappen van een Topolino?",
+        "antwoord": "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten."
+      },
+      {
+        "vraag": "Kan de wrap er na het evenement weer af?",
+        "antwoord": "Deze korte tekst laat zien hoeveel ruimte er is. Nog niet definitief."
+      }
+    ]
   }
 ]

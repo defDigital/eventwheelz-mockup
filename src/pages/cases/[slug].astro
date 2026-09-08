@@ -6,6 +6,10 @@ import PaginaKop from '../../components/PaginaKop.astro';
 import Kruimel from '../../components/Kruimel.astro';
 import VoertuigKaart from '../../components/VoertuigKaart.astro';
 import CtaBlok from '../../components/CtaBlok.astro';
+import DrieLuik from '../../components/DrieLuik.astro';
+import Cijfers from '../../components/Cijfers.astro';
+import Quote from '../../components/Quote.astro';
+import Fotostrook from '../../components/Fotostrook.astro';
 import { foto, logo } from '../../lib/beeld';
 import { link } from '../../lib/pad';
 
@@ -21,6 +25,12 @@ const voertuigen = await getEntries(d.voertuigen);
 const inzet = await getEntries(d.inzet);
 const beeld = foto(d.foto);
 const merk = logo(d.logo);
+
+const drieluik = [
+  { kop: 'De opdracht', tekst: d.opdracht },
+  { kop: 'Onze aanpak', tekst: d.aanpak },
+  { kop: 'Het resultaat', tekst: d.resultaat },
+];
 ---
 <Basis titel={`${d.klant} — case van Eventwheelz`} omschrijving={`${d.kort} Case van Eventwheelz, onderdeel van Unieke Uitjes.`}>
   <PaginaKop eyebrow="Case" titel={d.klant} intro={d.kort}>
@@ -39,7 +49,7 @@ const merk = logo(d.logo);
 
       <div class="case-body">
         <div class="tekst">
-          {d.verhaal.map((alinea: string) => <p>{alinea}</p>)}
+          {d.verhaal.map((alinea: string) => <p data-dummy>{alinea}</p>)}
         </div>
         <aside class="feiten">
           <div class="feit">
@@ -48,14 +58,34 @@ const merk = logo(d.logo);
               {inzet.map((u) => <a href={link(pad, `/inzet/${u.data.slug}`)}>{u.data.naam}</a>)}
             </span>
           </div>
+          {d.jaar && (
+            <div class="feit">
+              <span class="feit-label">Jaar</span>
+              <span class="feit-waarde">{d.jaar}</span>
+            </div>
+          )}
           <div class="feit">
-            <span class="feit-label">Jaar</span>
-            <span class="feit-waarde">{d.jaar ?? 'Nog aanleveren'}</span>
+            <span class="feit-label">Voertuigen</span>
+            <span class="feit-waarde">
+              {voertuigen.map((v) => <a href={link(pad, `/voertuigen/${v.data.slug}`)}>{v.data.naam}</a>)}
+            </span>
           </div>
         </aside>
       </div>
+
+      <div class="drieluik-wrap">
+        <DrieLuik blokken={drieluik} />
+      </div>
     </div>
   </section>
+
+  {d.cijfers.length > 0 && (
+    <Cijfers eyebrow="In cijfers" titel="Wat er stond" cijfers={d.cijfers} />
+  )}
+
+  <Fotostrook bestanden={d.fotos} alt={`Eventwheelz bij ${d.klant}`} />
+
+  {d.quote && <Quote tekst={d.quote.tekst} naam={d.quote.naam} rol={d.quote.rol} />}
 
   {voertuigen.length > 0 && (
     <section class="section is-band">
@@ -83,6 +113,7 @@ const merk = logo(d.logo);
   }
   .merk :global(img){height:40px;width:auto;object-fit:contain;}
   .hoofdbeeld{width:100%;height:auto;border-radius:var(--radius);margin-top:var(--s-4);}
+  .drieluik-wrap{margin-top:var(--s-8);}
   .case-body{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-8);margin-top:var(--s-6);align-items:start;}
   .tekst{display:flex;flex-direction:column;gap:var(--s-4);}
   .tekst p{color:var(--body);}

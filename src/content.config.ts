@@ -17,7 +17,12 @@ const voertuigen = defineCollection({
     naam: z.string(),                       // Plain text
     slug: z.string(),                       // Slug
     kort: z.string(),                       // Plain text  — tekst op de kaart
+    payoff: z.string(),                     // Plain text  — grote regel boven de tekst
     lang: z.array(z.string()),              // Rich text   — tekst op de detailpagina
+    faq: z.array(z.object({                 // Rich text of een aparte collectie
+      vraag: z.string(),
+      antwoord: z.string(),
+    })),
     vanafprijs: z.number().nullable(),      // Number
     prijsEenheid: z.string(),               // Plain text  — "per dag"
     inbegrepen: z.array(z.string()),        // Rich text   — wat er in de prijs zit
@@ -40,7 +45,17 @@ const usecases = defineCollection({
     nummer: z.string(),                      // Plain text — "01"
     label: z.string(),                       // Plain text — "Backstage"
     kort: z.string(),                        // Plain text
+    payoff: z.string(),                      // Plain text
     lang: z.array(z.string()),               // Rich text
+    stappen: z.array(z.object({              // Rich text of een aparte collectie
+      titel: z.string(),
+      tekst: z.string(),
+    })),
+    quote: z.object({                        // Plain text, drie velden
+      tekst: z.string(),
+      naam: z.string(),
+      rol: z.string(),
+    }).nullable(),
     hoofdfoto: z.string().nullable(),        // Image
     voertuigen: z.array(reference('voertuigen')), // Multi-reference → Voertuigen
     volgorde: z.number(),                    // Number
@@ -53,9 +68,22 @@ const cases = defineCollection({
     klant: z.string(),                       // Plain text
     slug: z.string(),                        // Slug
     kort: z.string(),                        // Plain text
+    opdracht: z.string(),                    // Rich text
+    aanpak: z.string(),                      // Rich text
+    resultaat: z.string(),                   // Rich text
     verhaal: z.array(z.string()),            // Rich text
+    cijfers: z.array(z.object({              // Rich text of een aparte collectie
+      getal: z.string(),
+      label: z.string(),
+    })),
+    quote: z.object({
+      tekst: z.string(),
+      naam: z.string(),
+      rol: z.string(),
+    }).nullable(),
     logo: z.string().nullable(),             // Image
     foto: z.string().nullable(),             // Image
+    fotos: z.array(z.string()),              // Multi-image
     jaar: z.string().nullable(),             // Plain text — leeg tot Roel het aanlevert
     inzet: z.array(reference('usecases')),   // Multi-reference → Use cases
     voertuigen: z.array(reference('voertuigen')), // Multi-reference → Voertuigen

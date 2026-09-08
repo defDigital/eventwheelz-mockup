@@ -4,6 +4,7 @@ import '../styles/tokens.css';
 import '../styles/basis.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { TOON_DUMMY_MARKERING } from '../lib/instellingen';
 
 interface Props { titel: string; omschrijving: string; }
 const { titel, omschrijving } = Astro.props;
@@ -37,7 +38,7 @@ const isPreview = basisUrl.hostname !== new URL(PRODUCTIE).hostname;
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#0a3a6e" />
 </head>
-<body>
+<body class:list={[TOON_DUMMY_MARKERING && 'toon-dummy']}>
   <a class="skip-link" href="#main">Naar de inhoud</a>
   <Header />
   <main id="main">

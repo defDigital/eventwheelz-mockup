@@ -5,6 +5,9 @@ import Basis from '../../layouts/Basis.astro';
 import PaginaKop from '../../components/PaginaKop.astro';
 import Kruimel from '../../components/Kruimel.astro';
 import CtaBlok from '../../components/CtaBlok.astro';
+import Stappen from '../../components/Stappen.astro';
+import Faq from '../../components/Faq.astro';
+import VoertuigKaart from '../../components/VoertuigKaart.astro';
 import { foto } from '../../lib/beeld';
 import { link } from '../../lib/pad';
 
@@ -18,15 +21,30 @@ const d = voertuig.data;
 const pad = Astro.url.pathname;
 const inzet = await getEntries(d.inzet);
 
+// Alleen tonen wat we weten. Drie regels die alle drie 'nog aanleveren'
+// zeggen lezen als een bouwput.
 const specs = [
   { label: 'Aantal personen', waarde: d.aantalPersonen },
   { label: 'Actieradius', waarde: d.actieradius },
   { label: 'Rijbewijs', waarde: d.rijbewijs },
+].filter((s) => s.waarde !== null);
+
+// Levering en ophalen gaan voor elk voertuig hetzelfde.
+const stappen = [
+  { titel: 'Je vraagt een offerte aan', tekst: 'Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later.' },
+  { titel: 'Wij bezorgen op locatie', tekst: 'Hier komt straks de echte tekst te staan, ongeveer even lang als deze.' },
+  { titel: 'Rijden, en accu wisselen', tekst: 'Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later.' },
+  { titel: 'Wij halen alles weer op', tekst: 'Deze korte tekst laat zien hoeveel ruimte er is. Nog niet definitief.' },
 ];
+
+// Andere voertuigen, voor onderaan de pagina.
+const alle = (await getCollection('voertuigen')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+const anderen = alle.filter((v) => v.id !== voertuig.id).slice(0, 3);
 const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
 ---
 <Basis titel={`${d.naam} huren — Eventwheelz`} omschrijving={d.kort}>
   <PaginaKop eyebrow="Onze wheels" titel={d.naam} intro={d.kort}>
+    <p class="kop-payoff">{d.payoff}</p>
     {d.vanafprijs !== null && (
       <p class="kop-prijs">v.a. &euro; {d.vanafprijs},- {d.prijsEenheid}</p>
     )}
@@ -50,33 +68,25 @@ const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
         )}
 
         <div class="detail-tekst">
-          {d.lang.map((alinea: string) => <p>{alinea}</p>)}
+          {d.lang.map((alinea: string) => <p data-dummy>{alinea}</p>)}
         </div>
 
-        {inzet.length > 0 && (
-          <div class="koppeling">
-            <h2>Waarvoor je hem inzet</h2>
-            <div class="koppeling-lijst">
-              {inzet.map((u) => (
-                <a class="chip" href={link(pad, `/inzet/${u.data.slug}`)}>{u.data.naam}</a>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       <aside class="detail-zij">
-        <div class="paneel">
-          <h2 class="paneel-kop">Specificaties</h2>
-          <dl class="specs">
-            {specs.map((s) => (
-              <div class="spec-rij">
-                <dt>{s.label}</dt>
-                <dd>{s.waarde ?? 'Nog aanleveren'}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        {specs.length > 0 && (
+          <div class="paneel">
+            <h2 class="paneel-kop">Specificaties</h2>
+            <dl class="specs">
+              {specs.map((s) => (
+                <div class="spec-rij">
+                  <dt>{s.label}</dt>
+                  <dd>{s.waarde}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
 
         <div class="paneel">
           <h2 class="paneel-kop">Bij de prijs inbegrepen</h2>
@@ -88,15 +98,53 @@ const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
           )}
         </div>
 
+        {inzet.length > 0 && (
+          <div class="paneel">
+            <h2 class="paneel-kop">Waarvoor je hem inzet</h2>
+            <div class="koppeling-lijst">
+              {inzet.map((u) => (
+                <a class="chip" href={link(pad, `/inzet/${u.data.slug}`)}>{u.data.naam}</a>
+              ))}
+            </div>
+          </div>
+        )}
+
         <a class="button is-primary paneel-cta" href={link(pad, '/contact')}>Offerte aanvragen</a>
       </aside>
     </div>
   </section>
 
+  <Stappen titel="Van aanvraag tot ophalen" stappen={stappen} />
+
+  <Faq vragen={d.faq} />
+
+  {anderen.length > 0 && (
+    <section class="section is-band">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Vaak samen gehuurd</span>
+          <h2>Ook interessant</h2>
+        </div>
+        <div class="grid is-3">
+          {anderen.map((v) => <VoertuigKaart voertuig={v} huidigPad={pad} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
   <CtaBlok huidigPad={pad} />
 </Basis>
 
 <style>
+  .kop-payoff{
+    margin-top:var(--s-5);
+    font-family:var(--f-display);
+    font-size:clamp(1.3rem,1.1rem + 1vw,1.9rem);
+    line-height:1.15;
+    text-transform:uppercase;
+    color:var(--accent);
+    max-width:22ch;
+  }
   .kop-prijs{
     margin-top:var(--s-5);
     display:inline-flex;align-items:center;

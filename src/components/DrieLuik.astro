@@ -1,0 +1,20 @@
+---
+interface Props { blokken: { kop: string; tekst: string }[]; }
+const { blokken } = Astro.props;
+---
+<div class="drieluik">
+  {blokken.map((b) => (
+    <div class="drieluik-blok">
+      <h2 class="drieluik-kop">{b.kop}</h2>
+      <p data-dummy>{b.tekst}</p>
+    </div>
+  ))}
+</div>
+
+<style>
+  .drieluik{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-6);}
+  .drieluik-blok{padding-top:var(--s-4);border-top:2px solid var(--accent);}
+  .drieluik-kop{font-size:1.3rem;margin-bottom:var(--s-3);}
+  .drieluik-blok p{color:var(--body);font-size:.95rem;}
+  @media (max-width:767px){ .drieluik{grid-template-columns:1fr;gap:var(--s-5);} }
+</style>

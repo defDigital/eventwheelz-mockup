@@ -4,38 +4,140 @@
     "klant": "Zwarte Cross",
     "slug": "zwarte-cross",
     "kort": "TukTuk-shuttle tussen camping en terrein, en E-Choppers voor de crew backstage.",
-    "verhaal": ["PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."],
+    "verhaal": [
+      "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+      "Deze alinea is met opzet iets langer, zodat je kunt zien wat er gebeurt als een blok meer tekst krijgt dan gemiddeld. De echte tekst schrijven we pas als de vormgeving vaststaat."
+    ],
     "logo": "zwarte-cross.png",
     "foto": "breed-tuktuks-onderweg.jpg",
     "jaar": null,
-    "inzet": ["crew-mobility", "people-mobility"],
-    "voertuigen": ["tuktuks", "e-choppers"],
-    "volgorde": 1
+    "inzet": [
+      "crew-mobility",
+      "people-mobility"
+    ],
+    "voertuigen": [
+      "tuktuks",
+      "e-choppers"
+    ],
+    "volgorde": 1,
+    "opdracht": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit.",
+    "aanpak": "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+    "resultaat": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit.",
+    "cijfers": [
+      {
+        "getal": "00",
+        "label": "voertuigen ingezet"
+      },
+      {
+        "getal": "0",
+        "label": "dagen op locatie"
+      },
+      {
+        "getal": "0.000",
+        "label": "ritten gereden"
+      }
+    ],
+    "quote": {
+      "tekst": "Hier komt een citaat van de organisator over hoe de inzet is bevallen.",
+      "naam": "Naam contactpersoon",
+      "rol": "Functie, Zwarte Cross"
+    },
+    "fotos": [
+      "breed-tuktuks-onderweg.jpg",
+      "breed-e-choppers-groep.jpg",
+      "breed-levering-aanhanger.jpg"
+    ]
   },
   {
     "id": "rivella",
     "klant": "Rivella",
     "slug": "rivella",
     "kort": "Een voertuig volledig gewrapt in de huisstijl van Rivella, als rijdende merkactivatie.",
-    "verhaal": ["PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."],
+    "verhaal": [
+      "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+      "Deze alinea is met opzet iets langer, zodat je kunt zien wat er gebeurt als een blok meer tekst krijgt dan gemiddeld. De echte tekst schrijven we pas als de vormgeving vaststaat."
+    ],
     "logo": "rivella.png",
     "foto": "breed-elektrische-autos.jpg",
     "jaar": null,
-    "inzet": ["branded-mobility"],
-    "voertuigen": ["tuktuks"],
-    "volgorde": 2
+    "inzet": [
+      "branded-mobility"
+    ],
+    "voertuigen": [
+      "tuktuks"
+    ],
+    "volgorde": 2,
+    "opdracht": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit.",
+    "aanpak": "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+    "resultaat": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit.",
+    "cijfers": [
+      {
+        "getal": "00",
+        "label": "voertuigen ingezet"
+      },
+      {
+        "getal": "0",
+        "label": "dagen op locatie"
+      },
+      {
+        "getal": "0.000",
+        "label": "ritten gereden"
+      }
+    ],
+    "quote": {
+      "tekst": "Hier komt een citaat van de organisator over hoe de inzet is bevallen.",
+      "naam": "Naam contactpersoon",
+      "rol": "Functie, Rivella"
+    },
+    "fotos": [
+      "breed-elektrische-autos.jpg",
+      "breed-tuktuks-klaar.jpg"
+    ]
   },
   {
     "id": "mauritshuis",
     "klant": "Mauritshuis",
     "slug": "mauritshuis",
     "kort": "Branded mobility voor het Mauritshuis.",
-    "verhaal": ["PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."],
+    "verhaal": [
+      "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+      "Deze alinea is met opzet iets langer, zodat je kunt zien wat er gebeurt als een blok meer tekst krijgt dan gemiddeld. De echte tekst schrijven we pas als de vormgeving vaststaat."
+    ],
     "logo": "mauritshuis.png",
     "foto": "breed-tuktuks-klaar.jpg",
     "jaar": null,
-    "inzet": ["branded-mobility"],
-    "voertuigen": ["tuktuks"],
-    "volgorde": 3
+    "inzet": [
+      "branded-mobility"
+    ],
+    "voertuigen": [
+      "tuktuks"
+    ],
+    "volgorde": 3,
+    "opdracht": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit.",
+    "aanpak": "Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.",
+    "resultaat": "Deze tekst staat er om de opmaak te kunnen beoordelen. De definitieve tekst volgt in de copywriting-ronde en wordt ongeveer even lang als dit.",
+    "cijfers": [
+      {
+        "getal": "00",
+        "label": "voertuigen ingezet"
+      },
+      {
+        "getal": "0",
+        "label": "dagen op locatie"
+      },
+      {
+        "getal": "0.000",
+        "label": "ritten gereden"
+      }
+    ],
+    "quote": {
+      "tekst": "Hier komt een citaat van de organisator over hoe de inzet is bevallen.",
+      "naam": "Naam contactpersoon",
+      "rol": "Functie, Mauritshuis"
+    },
+    "fotos": [
+      "breed-tuktuks-klaar.jpg",
+      "breed-tuktuks-onderweg.jpg"
+    ]
   }
 ]

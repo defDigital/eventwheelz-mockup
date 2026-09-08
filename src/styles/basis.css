@@ -26,7 +26,7 @@ body{
 img{max-width:100%;display:block;}
 a{color:inherit;}
 p{margin:0;}
-ul{margin:0;padding:0;list-style:none;}
+ul,ol{margin:0;padding:0;list-style:none;}
 
 h1,h2,h3{
   font-family:var(--f-display);
@@ -280,4 +280,12 @@ h4{
   margin-top:auto;
   font-weight:700;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted);
+}
+
+/* --- markering van vulteksten ------------------------------------------ */
+/* Alles met data-dummy is nog geen definitieve tekst. De markering staat aan
+   zolang TOON_DUMMY_MARKERING in src/lib/instellingen.ts op true staat. */
+.toon-dummy [data-dummy]{
+  text-decoration:underline dotted rgba(255,210,6,.55);
+  text-underline-offset:4px;
 }

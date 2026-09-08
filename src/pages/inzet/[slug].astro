@@ -6,6 +6,8 @@ import PaginaKop from '../../components/PaginaKop.astro';
 import Kruimel from '../../components/Kruimel.astro';
 import VoertuigKaart from '../../components/VoertuigKaart.astro';
 import CtaBlok from '../../components/CtaBlok.astro';
+import Stappen from '../../components/Stappen.astro';
+import Quote from '../../components/Quote.astro';
 import { foto } from '../../lib/beeld';
 import { link } from '../../lib/pad';
 
@@ -29,7 +31,9 @@ const cases = alleCases
 const beeld = foto(d.hoofdfoto);
 ---
 <Basis titel={`${d.naam} — Eventwheelz`} omschrijving={d.kort}>
-  <PaginaKop eyebrow={`${d.nummer} / ${d.label}`} titel={d.naam} intro={d.kort} />
+  <PaginaKop eyebrow={`${d.nummer} / ${d.label}`} titel={d.naam} intro={d.kort}>
+    <p class="kop-payoff">{d.payoff}</p>
+  </PaginaKop>
 
   <section class="section">
     <div class="wrap">
@@ -40,10 +44,14 @@ const beeld = foto(d.hoofdfoto);
       )}
 
       <div class="tekst">
-        {d.lang.map((alinea: string) => <p>{alinea}</p>)}
+        {d.lang.map((alinea: string) => <p data-dummy>{alinea}</p>)}
       </div>
     </div>
   </section>
+
+  {d.stappen.length > 0 && (
+    <Stappen titel={`Zo zetten we ${d.naam.toLowerCase()} in`} stappen={d.stappen} />
+  )}
 
   {voertuigen.length > 0 && (
     <section class="section is-band">
@@ -79,10 +87,21 @@ const beeld = foto(d.hoofdfoto);
     </section>
   )}
 
+  {d.quote && <Quote tekst={d.quote.tekst} naam={d.quote.naam} rol={d.quote.rol} />}
+
   <CtaBlok huidigPad={pad} />
 </Basis>
 
 <style>
+  .kop-payoff{
+    margin-top:var(--s-5);
+    font-family:var(--f-display);
+    font-size:clamp(1.3rem,1.1rem + 1vw,1.9rem);
+    line-height:1.15;
+    text-transform:uppercase;
+    color:var(--accent);
+    max-width:26ch;
+  }
   .hoofdbeeld{width:100%;height:auto;border-radius:var(--radius);margin-top:var(--s-4);}
   .tekst{margin-top:var(--s-6);display:flex;flex-direction:column;gap:var(--s-4);max-width:64ch;}
   .tekst p{color:var(--body);}

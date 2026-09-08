@@ -3,10 +3,33 @@ import Basis from '../layouts/Basis.astro';
 import PaginaKop from '../components/PaginaKop.astro';
 import Logobalk from '../components/Logobalk.astro';
 import CtaBlok from '../components/CtaBlok.astro';
+import Stappen from '../components/Stappen.astro';
+import Cijfers from '../components/Cijfers.astro';
+import DrieLuik from '../components/DrieLuik.astro';
 const pad = Astro.url.pathname;
 
 // Vestigingen uit de handtekening van Roel. Niet verzonnen, wel controleren
 // of ze alle drie op de Eventwheelz-site horen te staan.
+const stappen = [
+  { titel: 'Je vertelt wat je nodig hebt', tekst: 'Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later.' },
+  { titel: 'Wij maken een voorstel', tekst: 'Hier komt straks de echte tekst te staan, ongeveer even lang als deze.' },
+  { titel: 'Bezorgen en instructie', tekst: 'Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later.' },
+  { titel: 'Ophalen na afloop', tekst: 'Deze korte tekst laat zien hoeveel ruimte er is. Nog niet definitief.' },
+];
+
+// Getallen nog opvragen bij Roel. Vorm staat, cijfers volgen.
+const cijfers = [
+  { getal: '000', label: 'voertuigen in de vloot' },
+  { getal: '00', label: 'evenementen per jaar' },
+  { getal: '0', label: 'vestigingen' },
+];
+
+const waarom = [
+  { kop: 'Alles uit één hand', tekst: 'Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later.' },
+  { kop: 'Nooit stilstand', tekst: 'Hier komt straks de echte tekst te staan, ongeveer even lang als deze.' },
+  { kop: 'Ervaring op locatie', tekst: 'Vulzin om de lengte van dit blok te tonen. De echte tekst volgt later.' },
+];
+
 const vestigingen = [
   { plaats: 'Laren Gld.', adres: 'Deventerweg 67C', postcode: '7245 PJ' },
   { plaats: 'Borculo', adres: 'Korenbree 58', postcode: '7271 LH' },
@@ -17,13 +40,13 @@ const vestigingen = [
   <PaginaKop
     eyebrow="Over ons"
     titel="Onderdeel van Unieke Uitjes"
-    intro="PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde." />
+    intro="Dezelfde vloot en dezelfde mensen als bij Unieke Uitjes, maar dan ingericht op wat een evenement nodig heeft." />
 
   <section class="section">
     <div class="wrap over-grid">
       <div class="tekst">
-        <p>PLACEHOLDER. Hier komt het verhaal achter Eventwheelz: waar de vloot vandaan komt, hoe de logistiek werkt en waarom evenementorganisatoren met ons werken.</p>
-        <p>Eventwheelz is het evenementenmerk van Unieke Uitjes. Dezelfde vloot, dezelfde mensen, maar dan ingericht op wat een evenement nodig heeft: leveren op locatie, accu's die niet stilvallen en voertuigen die tegen een dag vol gebruik kunnen.</p>
+        <p data-dummy>Hier komt straks de echte tekst te staan. Deze regels dienen alleen om te laten zien hoeveel ruimte een alinea inneemt en hoe de regels afbreken op verschillende schermformaten.</p>
+        <p data-dummy>Deze alinea is met opzet iets langer, zodat je kunt zien wat er gebeurt als een blok meer tekst krijgt dan gemiddeld. De echte tekst schrijven we pas als de vormgeving vaststaat.</p>
       </div>
 
       <aside class="paneel">
@@ -43,6 +66,20 @@ const vestigingen = [
       </aside>
     </div>
   </section>
+
+  <section class="section is-band">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Waarom Eventwheelz</span>
+        <h2>Wat je van ons kunt verwachten</h2>
+      </div>
+      <DrieLuik blokken={waarom} />
+    </div>
+  </section>
+
+  <Stappen titel="Van aanvraag tot ophalen" eyebrow="Hoe het werkt" stappen={stappen} />
+
+  <Cijfers eyebrow="De vloot" titel="Eventwheelz in cijfers" cijfers={cijfers} />
 
   <Logobalk />
   <CtaBlok huidigPad={pad} />

@@ -1,0 +1,39 @@
+---
+interface Props { titel: string; eyebrow?: string; stappen: { titel: string; tekst: string }[]; }
+const { titel, eyebrow = 'Zo werkt het', stappen } = Astro.props;
+---
+<section class="section is-band">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2>{titel}</h2>
+    </div>
+    <ol class="stappen">
+      {stappen.map((s, i) => (
+        <li class="stap">
+          <span class="stap-num">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="stap-titel">{s.titel}</h3>
+          <p data-dummy>{s.tekst}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .stappen{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-5);counter-reset:stap;}
+  .stap{
+    position:relative;
+    padding-top:var(--s-5);
+    border-top:2px solid var(--accent);
+  }
+  .stap-num{
+    display:block;
+    font-family:var(--f-display);font-size:1.6rem;line-height:1;
+    color:var(--accent);margin-bottom:var(--s-3);
+  }
+  .stap-titel{font-size:1.05rem;text-transform:none;font-family:var(--f-body);font-weight:700;line-height:1.35;margin-bottom:var(--s-2);}
+  .stap p{color:var(--body);font-size:.92rem;}
+  @media (max-width:991px){ .stappen{grid-template-columns:1fr 1fr;} }
+  @media (max-width:479px){ .stappen{grid-template-columns:1fr;} }
+</style>

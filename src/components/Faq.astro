@@ -1,0 +1,38 @@
+---
+interface Props { titel?: string; vragen: { vraag: string; antwoord: string }[]; }
+const { titel = 'Veelgestelde vragen', vragen } = Astro.props;
+---
+<section class="section">
+  <div class="wrap faq-grid">
+    <div class="section-head">
+      <span class="eyebrow">Goed om te weten</span>
+      <h2>{titel}</h2>
+    </div>
+    <div class="faq-lijst">
+      {vragen.map((v, i) => (
+        <details class="faq-item" open={i === 0}>
+          <summary>{v.vraag}</summary>
+          <p data-dummy>{v.antwoord}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:var(--s-8);align-items:start;}
+  .faq-grid .section-head{margin-bottom:0;}
+  .faq-lijst{display:flex;flex-direction:column;}
+  .faq-item{border-top:1px solid var(--line);}
+  .faq-item:last-child{border-bottom:1px solid var(--line);}
+  .faq-item summary{
+    display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
+    min-height:64px;padding-block:var(--s-3);
+    font-weight:700;color:var(--white);cursor:pointer;list-style:none;
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:"+";color:var(--accent);font-size:1.4rem;line-height:1;flex:none;}
+  .faq-item[open] summary::after{content:"–";}
+  .faq-item p{padding-bottom:var(--s-5);color:var(--body);max-width:64ch;}
+  @media (max-width:991px){ .faq-grid{grid-template-columns:1fr;gap:var(--s-5);} }
+</style>
