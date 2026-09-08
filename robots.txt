@@ -1,0 +1,3 @@
+# Preview-omgeving — niet indexeren.
+User-agent: *
+Disallow: /
