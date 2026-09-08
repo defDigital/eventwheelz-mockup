@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Basis from '../layouts/Basis.astro';
+import PaginaKop from '../components/PaginaKop.astro';
+import VoertuigKaart from '../components/VoertuigKaart.astro';
+import CtaBlok from '../components/CtaBlok.astro';
+
+const pad = Astro.url.pathname;
+const voertuigen = (await getCollection('voertuigen')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+const inbegrepen = ['WA-verzekering', '21% btw', 'Bezorgen en ophalen', 'Helmen en haarnetjes (indien van toepassing)'];
+---
+<Basis titel="Onze wheels — Eventwheelz" omschrijving="E-Choppers, E-Fatbikes, E-Steps, TukTuks en Topolino's voor evenementen. Vanafprijzen per dag, inclusief bezorgen en ophalen.">
+  <PaginaKop
+    eyebrow="Onze wheels"
+    titel="Elk voertuig, een eigen taak."
+    intro="Alle voertuigen worden geleverd, geplaatst en weer opgehaald. Kies per inzet wat past, of combineer." />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="grid is-4">
+        {voertuigen.map((v) => <VoertuigKaart voertuig={v} huidigPad={pad} kopniveau="h2" />)}
+      </div>
+      <p class="inbegrepen">
+        <strong>Bij elke prijs inbegrepen:</strong>{' '}
+        {inbegrepen.join(' · ')}
+      </p>
+    </div>
+  </section>
+
+  <CtaBlok huidigPad={pad} tweedeDoel="/inzet" tweedeLabel="Bekijk de inzetten" />
+</Basis>
+
+<style>
+  .inbegrepen{
+    margin-top:var(--s-6);padding-top:var(--s-4);
+    border-top:1px solid var(--line);
+    color:var(--muted);font-size:.92rem;
+  }
+  .inbegrepen strong{color:var(--white);}
+</style>

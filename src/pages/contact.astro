@@ -1,0 +1,48 @@
+---
+import Basis from '../layouts/Basis.astro';
+import PaginaKop from '../components/PaginaKop.astro';
+import OfferteFormulier from '../components/OfferteFormulier.astro';
+---
+<Basis titel="Offerte aanvragen — Eventwheelz" omschrijving="Vertel om wat voor evenement het gaat en wat je nodig hebt. Je krijgt een voorstel op maat.">
+  <PaginaKop
+    eyebrow="Offerte aanvragen"
+    titel="Klaar om je event in beweging te zetten?"
+    intro="Vertel om wat voor evenement het gaat en wat je nodig hebt. We denken mee over de juiste mix en sturen een voorstel op maat." />
+
+  <section class="section">
+    <div class="wrap contact-grid">
+      <OfferteFormulier />
+
+      <aside class="contact-zij">
+        <div class="paneel">
+          <h2 class="paneel-kop">Direct contact</h2>
+          <p><a href="mailto:info@eventwheelz.nl">info@eventwheelz.nl</a></p>
+          <p class="paneel-note">Onderdeel van Unieke Uitjes. Landelijke inzet, het hele jaar door.</p>
+        </div>
+        <div class="paneel">
+          <h2 class="paneel-kop">Handig om erbij te zetten</h2>
+          <ul class="tips">
+            <li>Datum en locatie van het evenement</li>
+            <li>Aantal bezoekers of crewleden</li>
+            <li>Of het om crew, gasten of een merkactivatie gaat</li>
+            <li>Of je een wrap in je eigen huisstijl wilt</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .contact-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:var(--s-8);align-items:start;}
+  .contact-zij{display:flex;flex-direction:column;gap:var(--s-4);}
+  .paneel{background:var(--band-bg);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s-5);}
+  .paneel-kop{font-size:1.05rem;margin-bottom:var(--s-4);}
+  .paneel p{color:var(--body);}
+  .paneel a{color:var(--accent);}
+  .paneel-note{margin-top:var(--s-3);color:var(--muted);font-size:.88rem;}
+  .tips{display:flex;flex-direction:column;gap:var(--s-2);}
+  .tips li{color:var(--body);font-size:.92rem;padding-left:var(--s-4);position:relative;}
+  .tips li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  @media (max-width:991px){ .contact-grid{grid-template-columns:1fr;gap:var(--s-6);} }
+</style>

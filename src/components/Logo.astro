@@ -1,0 +1,31 @@
+---
+interface Props { hoogte?: number; }
+const { hoogte = 26 } = Astro.props;
+---
+<span class="logo">
+  <svg width={hoogte * 0.85} height={hoogte} viewBox="0 0 22 26" fill="none" aria-hidden="true">
+    <path d="M13.5 0L1 15h7.5L7 26 21 9h-8.5L13.5 0Z" fill="var(--yellow)" />
+  </svg>
+  <span class="logo-text">
+    <span class="logo-name">EVENTWHEELZ</span>
+    <span class="logo-sub">onderdeel van Unieke Uitjes</span>
+  </span>
+</span>
+
+<style>
+  .logo{display:inline-flex;align-items:center;gap:var(--s-2);}
+  .logo-text{display:flex;flex-direction:column;line-height:1;}
+  .logo-name{
+    font-family:var(--f-display);
+    font-size:1.3rem;
+    letter-spacing:.02em;
+    color:var(--white);
+  }
+  .logo-sub{
+    font-size:.62rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:3px;
+  }
+</style>

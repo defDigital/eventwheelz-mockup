@@ -1,0 +1,102 @@
+---
+import Logo from './Logo.astro';
+import { link } from '../lib/pad';
+
+const pad = Astro.url.pathname;
+const l = (doel: string) => link(pad, doel);
+
+const menu = [
+  { naam: 'Onze wheels', doel: '/voertuigen' },
+  { naam: 'Inzet', doel: '/inzet' },
+  { naam: 'Cases', doel: '/cases' },
+  { naam: 'Over ons', doel: '/over' },
+];
+const huidig = pad.replace(/\.html$/, '').replace(/\/index$/, '/');
+---
+<header class="navbar">
+  <div class="wrap navbar-inner">
+    <a href={l('/')} class="navbar-brand" aria-label="Eventwheelz, naar de homepage">
+      <Logo />
+    </a>
+
+    <button class="navbar-toggle" type="button" aria-expanded="false" aria-controls="hoofdmenu">
+      <span class="navbar-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+
+    <nav class="navbar-menu" id="hoofdmenu" aria-label="Hoofdmenu">
+      {menu.map((m) => (
+        <a href={l(m.doel)} aria-current={huidig.startsWith(m.doel) ? 'page' : undefined}>{m.naam}</a>
+      ))}
+      <a href={l('/contact')} class="button is-primary navbar-cta">Offerte aanvragen</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .navbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,58,110,.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .navbar-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:var(--s-5);
+    padding-block:var(--s-3);
+  }
+  .navbar-brand{text-decoration:none;display:inline-flex;align-items:center;min-height:44px;}
+
+  .navbar-menu{display:flex;align-items:center;gap:var(--s-5);}
+  .navbar-menu a{
+    display:inline-flex;align-items:center;min-height:44px;
+    text-decoration:none;
+    font-size:.9rem;font-weight:600;
+    color:var(--body);
+    white-space:nowrap;
+  }
+  .navbar-menu a:hover{color:var(--white);}
+  .navbar-menu a[aria-current="page"]{color:var(--accent);}
+  .navbar-cta{color:var(--accent-text) !important;}
+
+  .navbar-toggle{
+    display:none;
+    width:48px;height:48px;
+    align-items:center;justify-content:center;
+    background:transparent;border:1px solid var(--line);border-radius:var(--radius);
+    cursor:pointer;
+  }
+  .navbar-toggle-bars{display:grid;gap:4px;}
+  .navbar-toggle-bars span{display:block;width:20px;height:2px;background:var(--white);}
+  .visually-hidden{
+    position:absolute;width:1px;height:1px;overflow:hidden;
+    clip-path:inset(50%);white-space:nowrap;
+  }
+
+  /* 991px is ook de standaard waarop de Webflow-navbar inklapt */
+  @media (max-width:991px){
+    .navbar-toggle{display:inline-flex;}
+    .navbar-menu{
+      display:none;
+      position:absolute;left:0;right:0;top:100%;
+      flex-direction:column;align-items:stretch;
+      gap:0;
+      padding:var(--s-3) var(--s-5) var(--s-5);
+      background:var(--navy);
+      border-bottom:1px solid var(--line);
+    }
+    .navbar-menu.is-open{display:flex;}
+    .navbar-menu a{min-height:52px;font-size:1rem;}
+    .navbar-cta{margin-top:var(--s-3);justify-content:center;}
+  }
+</style>
+
+<script>
+  // Zelfde gedrag als de Webflow-navbar: knop klapt het menu open en dicht.
+  const knop = document.querySelector<HTMLButtonElement>('.navbar-toggle');
+  const menu = document.getElementById('hoofdmenu');
+  knop?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('is-open') ?? false;
+    knop.setAttribute('aria-expanded', String(open));
+  });
+</script>

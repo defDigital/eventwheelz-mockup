@@ -1,0 +1,95 @@
+---
+import { getCollection, getEntries } from 'astro:content';
+import { Image } from 'astro:assets';
+import Basis from '../../layouts/Basis.astro';
+import PaginaKop from '../../components/PaginaKop.astro';
+import Kruimel from '../../components/Kruimel.astro';
+import VoertuigKaart from '../../components/VoertuigKaart.astro';
+import CtaBlok from '../../components/CtaBlok.astro';
+import { foto, logo } from '../../lib/beeld';
+import { link } from '../../lib/pad';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('cases');
+  return cases.map((c) => ({ params: { slug: c.data.slug }, props: { item: c } }));
+}
+
+const { item } = Astro.props;
+const d = item.data;
+const pad = Astro.url.pathname;
+const voertuigen = await getEntries(d.voertuigen);
+const inzet = await getEntries(d.inzet);
+const beeld = foto(d.foto);
+const merk = logo(d.logo);
+---
+<Basis titel={`${d.klant} — case van Eventwheelz`} omschrijving={`${d.kort} Case van Eventwheelz, onderdeel van Unieke Uitjes.`}>
+  <PaginaKop eyebrow="Case" titel={d.klant} intro={d.kort}>
+    {merk && (
+      <span class="merk"><Image src={merk} alt={d.klant} height={40} loading="eager" /></span>
+    )}
+  </PaginaKop>
+
+  <section class="section">
+    <div class="wrap">
+      <Kruimel naar="/cases" label="Alle cases" />
+
+      {beeld && (
+        <Image class="hoofdbeeld" src={beeld} alt={`Eventwheelz bij ${d.klant}`} widths={[800, 1400]} sizes="100vw" loading="eager" />
+      )}
+
+      <div class="case-body">
+        <div class="tekst">
+          {d.verhaal.map((alinea: string) => <p>{alinea}</p>)}
+        </div>
+        <aside class="feiten">
+          <div class="feit">
+            <span class="feit-label">Inzet</span>
+            <span class="feit-waarde">
+              {inzet.map((u) => <a href={link(pad, `/inzet/${u.data.slug}`)}>{u.data.naam}</a>)}
+            </span>
+          </div>
+          <div class="feit">
+            <span class="feit-label">Jaar</span>
+            <span class="feit-waarde">{d.jaar ?? 'Nog aanleveren'}</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  {voertuigen.length > 0 && (
+    <section class="section is-band">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Ingezet bij deze case</span>
+          <h2>De voertuigen die er stonden</h2>
+        </div>
+        <div class="grid is-4">
+          {voertuigen.map((v) => <VoertuigKaart voertuig={v} huidigPad={pad} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBlok huidigPad={pad} />
+</Basis>
+
+<style>
+  .merk{
+    display:inline-flex;align-items:center;justify-content:center;
+    margin-top:var(--s-5);
+    background:var(--white);border-radius:var(--radius);
+    padding:var(--s-3) var(--s-4);
+  }
+  .merk :global(img){height:40px;width:auto;object-fit:contain;}
+  .hoofdbeeld{width:100%;height:auto;border-radius:var(--radius);margin-top:var(--s-4);}
+  .case-body{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-8);margin-top:var(--s-6);align-items:start;}
+  .tekst{display:flex;flex-direction:column;gap:var(--s-4);}
+  .tekst p{color:var(--body);}
+  .feiten{background:var(--band-bg);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s-5);display:flex;flex-direction:column;gap:var(--s-4);}
+  .feit{display:flex;flex-direction:column;gap:var(--s-1);}
+  .feit-label{font-weight:700;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);}
+  .feit-waarde{display:flex;flex-wrap:wrap;gap:var(--s-3);color:var(--white);font-weight:700;font-size:.92rem;}
+  .feit-waarde a{color:var(--white);}
+  @media (max-width:991px){ .case-body{grid-template-columns:1fr;gap:var(--s-5);} }
+</style>

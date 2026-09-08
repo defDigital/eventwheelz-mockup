@@ -1,0 +1,63 @@
+---
+import Basis from '../layouts/Basis.astro';
+import PaginaKop from '../components/PaginaKop.astro';
+import Logobalk from '../components/Logobalk.astro';
+import CtaBlok from '../components/CtaBlok.astro';
+const pad = Astro.url.pathname;
+
+// Vestigingen uit de handtekening van Roel. Niet verzonnen, wel controleren
+// of ze alle drie op de Eventwheelz-site horen te staan.
+const vestigingen = [
+  { plaats: 'Laren Gld.', adres: 'Deventerweg 67C', postcode: '7245 PJ' },
+  { plaats: 'Borculo', adres: 'Korenbree 58', postcode: '7271 LH' },
+  { plaats: 'Winterswijk', adres: 'Europark 6', postcode: '7102 AM' },
+];
+---
+<Basis titel="Over Eventwheelz — onderdeel van Unieke Uitjes" omschrijving="Eventwheelz is het evenementenmerk van Unieke Uitjes. Wij leveren de voertuigen, de accu's en de logistiek.">
+  <PaginaKop
+    eyebrow="Over ons"
+    titel="Onderdeel van Unieke Uitjes"
+    intro="PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde." />
+
+  <section class="section">
+    <div class="wrap over-grid">
+      <div class="tekst">
+        <p>PLACEHOLDER. Hier komt het verhaal achter Eventwheelz: waar de vloot vandaan komt, hoe de logistiek werkt en waarom evenementorganisatoren met ons werken.</p>
+        <p>Eventwheelz is het evenementenmerk van Unieke Uitjes. Dezelfde vloot, dezelfde mensen, maar dan ingericht op wat een evenement nodig heeft: leveren op locatie, accu's die niet stilvallen en voertuigen die tegen een dag vol gebruik kunnen.</p>
+      </div>
+
+      <aside class="paneel">
+        <h2 class="paneel-kop">Vestigingen van Unieke Uitjes</h2>
+        <ul class="vestigingen">
+          {vestigingen.map((v) => (
+            <li>
+              <strong>{v.plaats}</strong>
+              <span>{v.adres}</span>
+              <span>{v.postcode}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="paneel-note">
+          Landelijke inzet. <a href="https://www.uniekeuitjes.nl">uniekeuitjes.nl</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <Logobalk />
+  <CtaBlok huidigPad={pad} />
+</Basis>
+
+<style>
+  .over-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-8);align-items:start;}
+  .tekst{display:flex;flex-direction:column;gap:var(--s-4);max-width:64ch;}
+  .tekst p{color:var(--body);}
+  .paneel{background:var(--band-bg);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s-5);}
+  .paneel-kop{font-size:1.05rem;margin-bottom:var(--s-4);}
+  .vestigingen{display:flex;flex-direction:column;gap:var(--s-4);}
+  .vestigingen li{display:flex;flex-direction:column;}
+  .vestigingen strong{color:var(--white);}
+  .vestigingen span{color:var(--muted);font-size:.9rem;}
+  .paneel-note{margin-top:var(--s-4);padding-top:var(--s-4);border-top:1px solid var(--line);color:var(--muted);font-size:.88rem;}
+  @media (max-width:991px){ .over-grid{grid-template-columns:1fr;gap:var(--s-6);} }
+</style>

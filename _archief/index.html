@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eventwheelz — backstage mobility for events</title>
+<meta name="description" content="Eventwheelz verhuurt e-choppers, tuktuks en Topolino's voor evenementen. Crew mobility, people mobility en volledig gewrapte merkactivaties. Powered by Unieke Uitjes.">
+<meta name="theme-color" content="#1B0E33">
+<meta property="og:title" content="Eventwheelz — stop walking, start rolling.">
+<meta property="og:description" content="Mobiliteit voor evenementen: crew, artiesten en gasten in beweging. Met of zonder jouw merk erop.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   EVENTWHEELZ — tokens
+   Contrast nagerekend (WCAG 2.1, relatieve luminantie), niet geschat:
+     volt   #F4D93E op void #1B0E33 .......... 12,83:1  AAA
+     volt   #F4D93E op pit  #0D0B14 .......... 13,81:1  AAA
+     volt   #F4D93E op paddock #F7F4EF ....... 1,29:1   ONBRUIKBAAR -> nooit gele tekst op licht
+     paddock op void ........................ 16,54:1  AAA
+     void   op volt (knop) .................. 12,83:1  AAA
+     circuit #4B1F82 op paddock ............. 10,54:1  AAA  <- accentkleur op licht
+     haze   #6E6478 op paddock .............. 5,10:1   AA   <- body op licht
+     haze-soft #9089A0 op void .............. 5,42:1   AA   <- body op donker
+     haze-soft #9089A0 op pit ............... 5,84:1   AA
+   ============================================================ */
+:root{
+  --void:#1B0E33;
+  --circuit:#4B1F82;
+  --volt:#F4D93E;
+  --pit:#0D0B14;
+  --paddock:#F7F4EF;
+  --haze:#6E6478;
+  --haze-soft:#9089A0;
+
+  --line-dark:rgba(247,244,239,.14);
+  --line-light:rgba(27,14,51,.12);
+
+  --font-display:'Anton',Impact,'Haettenschweiler','Arial Narrow',sans-serif;
+  --font-body:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --pad:clamp(1.25rem,5vw,3rem);
+  --sec:clamp(4.5rem,10vw,8.5rem);
+  --radius:18px;
+  --header-h:76px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--paddock);
+  font-family:var(--font-body);
+  font-size:clamp(1rem,.96rem + .2vw,1.0625rem);
+  line-height:1.65;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+
+h1,h2,h3{
+  font-family:var(--font-display);
+  font-weight:400;
+  text-transform:uppercase;
+  letter-spacing:.005em;
+  margin:0;
+}
+h1{font-size:clamp(2.6rem,1.3rem + 5.6vw,5.5rem);line-height:1.06}
+h2{font-size:clamp(2rem,1.2rem + 3.6vw,4rem);line-height:1.08}
+h3{font-size:clamp(1.3rem,1.05rem + 1.1vw,1.85rem);line-height:1.15}
+p{margin:0 0 1rem}
+
+.wrap{width:min(1220px,100%);margin-inline:auto;padding-inline:var(--pad)}
+.eyebrow{
+  font-family:var(--font-mono);
+  text-transform:uppercase;
+  font-size:.72rem;
+  letter-spacing:.16em;
+  font-weight:500;
+  margin:0 0 1rem;
+  display:block;
+}
+.eyebrow--volt{color:var(--volt)}
+.eyebrow--circuit{color:var(--circuit)}
+
+.lead{font-size:clamp(1.05rem,1rem + .45vw,1.3rem);line-height:1.6}
+.muted-dark{color:var(--haze-soft)}
+.muted-light{color:var(--haze)}
+
+/* --- skip link --- */
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:200;
+  background:var(--volt);color:var(--void);
+  padding:.9rem 1.25rem;font-family:var(--font-mono);font-size:.8rem;
+  text-transform:uppercase;letter-spacing:.1em;text-decoration:none;
+}
+.skip:focus{left:1rem;top:1rem}
+
+/* --- focus --- */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid var(--volt);
+  outline-offset:3px;
+  border-radius:4px;
+}
+.on-light a:focus-visible,.on-light button:focus-visible,
+.on-light input:focus-visible,.on-light select:focus-visible,.on-light textarea:focus-visible{
+  outline-color:var(--circuit);
+}
+
+/* ---------- header ---------- */
+.header{
+  position:fixed;inset:0 0 auto 0;z-index:100;
+  background:rgba(13,11,20,.72);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  backdrop-filter:blur(16px) saturate(140%);
+  border-bottom:1px solid var(--line-dark);
+}
+.header__inner{
+  display:flex;align-items:center;gap:clamp(1rem,3vw,2.5rem);
+  min-height:var(--header-h);
+}
+.brand{
+  display:inline-flex;align-items:center;gap:.55rem;
+  text-decoration:none;color:var(--paddock);
+  font-family:var(--font-display);
+  font-size:1.15rem;letter-spacing:.04em;text-transform:uppercase;
+  white-space:nowrap;
+  padding:.5rem 0;min-height:44px;
+}
+.brand svg{width:20px;height:26px;flex:none;color:var(--volt)}
+.nav{
+  display:flex;align-items:center;gap:clamp(.75rem,1.6vw,1.75rem);
+  margin-left:auto;
+}
+.nav a{
+  font-family:var(--font-mono);
+  font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--paddock);text-decoration:none;
+  display:inline-flex;align-items:center;min-height:44px;
+  white-space:nowrap;
+  border-bottom:1px solid transparent;
+}
+.nav a:hover{color:var(--volt);border-bottom-color:var(--volt)}
+.header .btn{margin-left:.25rem}
+.t-short{display:none}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  min-height:52px;padding:.9rem 1.6rem;
+  font-family:var(--font-mono);font-size:.78rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:.1em;
+  text-decoration:none;border-radius:999px;border:1px solid transparent;
+  cursor:pointer;transition:transform .18s ease,background-color .18s ease,color .18s ease,border-color .18s ease;
+}
+.btn--primary{background:var(--volt);color:var(--void);border-color:var(--volt)}
+.btn--primary:hover{transform:translateY(-2px);background:#FFE85C}
+.btn--ghost{background:transparent;color:var(--paddock);border-color:rgba(247,244,239,.38)}
+.btn--ghost:hover{transform:translateY(-2px);border-color:var(--volt);color:var(--volt)}
+.btn--sm{min-height:44px;padding:.65rem 1.15rem;font-size:.72rem}
+
+/* ---------- section frame ---------- */
+.section{position:relative;padding-block:var(--sec)}
+.section--light{background:var(--paddock);color:var(--void)}
+.section--pit{background:var(--pit)}
+.edge{
+  position:absolute;left:0;width:100%;
+  height:clamp(38px,5.5vw,88px);
+  display:block;pointer-events:none;
+}
+.edge--bottom{bottom:-1px}
+.edge--top{top:-1px}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;
+  padding-top:calc(var(--header-h) + clamp(3rem,7vw,6rem));
+  padding-bottom:clamp(4rem,9vw,7.5rem);
+  background:
+    radial-gradient(900px 620px at 82% 8%,rgba(75,31,130,.85),transparent 62%),
+    radial-gradient(700px 520px at 6% 92%,rgba(75,31,130,.55),transparent 65%),
+    linear-gradient(168deg,#2A1256 0%,var(--void) 52%,var(--pit) 100%);
+  overflow:hidden;
+}
+.hero__grid{
+  display:grid;grid-template-columns:1.05fr .95fr;
+  gap:clamp(2rem,5vw,4.5rem);align-items:center;
+}
+.hero h1{
+  /* line-height ruim genoeg zodat het gele blok achter 'rolling.' de regel erboven niet raakt */
+  line-height:1.16;
+  margin-bottom:1.5rem;
+  position:relative;
+  isolation:isolate;
+}
+.mark{position:relative;color:var(--void);padding-inline:.1em}
+.mark::before{
+  content:"";position:absolute;z-index:-1;
+  left:-.06em;right:-.06em;top:.10em;bottom:.045em;
+  background:var(--volt);
+  border-radius:6px;
+}
+.hero__text .lead{max-width:44ch;color:var(--haze-soft);margin-bottom:2rem}
+.hero__actions{display:flex;flex-wrap:wrap;gap:.85rem}
+
+.hero__media{position:relative}
+.shot{
+  position:relative;overflow:hidden;border-radius:var(--radius);
+  border:1px solid var(--line-dark);
+  background:var(--circuit);
+}
+.shot img{width:100%;height:100%;object-fit:cover}
+.hero__shot img{height:auto;aspect-ratio:4/3}
+.tags{
+  display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem;
+  list-style:none;padding:0;
+}
+.tags li{
+  font-family:var(--font-mono);font-size:.68rem;
+  text-transform:uppercase;letter-spacing:.12em;
+  color:var(--volt);
+  border:1px solid rgba(244,217,62,.4);
+  border-radius:999px;padding:.42rem .8rem;
+}
+
+/* ---------- ticker ---------- */
+.ticker{
+  background:var(--volt);color:var(--void);
+  border-block:1px solid var(--pit);
+  overflow:hidden;position:relative;
+}
+.ticker__track{
+  display:flex;width:max-content;
+  animation:slide 34s linear infinite;
+}
+.ticker__list{
+  display:flex;align-items:center;gap:0;
+  list-style:none;margin:0;padding:0;
+}
+.ticker__list li{
+  display:flex;align-items:center;gap:1.4rem;
+  font-family:var(--font-mono);font-weight:500;
+  font-size:clamp(.72rem,.68rem + .18vw,.85rem);
+  text-transform:uppercase;letter-spacing:.14em;
+  padding:.95rem 1.4rem;white-space:nowrap;
+}
+.ticker__list li::after{
+  content:"";width:7px;height:7px;border-radius:50%;
+  background:var(--void);flex:none;
+}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- implementaties ---------- */
+.impl{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,2vw,1.5rem)}
+.panel{
+  position:relative;overflow:hidden;border-radius:var(--radius);
+  border:1px solid var(--line-dark);
+  min-height:clamp(360px,44vw,520px);
+  display:flex;
+}
+.panel img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+}
+.panel::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(13,11,20,.94) 6%,rgba(13,11,20,.72) 38%,rgba(13,11,20,.15) 72%,rgba(13,11,20,.35) 100%);
+}
+.panel__body{
+  position:relative;z-index:1;margin-top:auto;
+  padding:clamp(1.25rem,2.4vw,1.9rem);
+}
+.panel__num{
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--volt);display:block;margin-bottom:.75rem;
+}
+.panel h3{margin-bottom:.6rem}
+.panel p{color:var(--haze-soft);margin:0;font-size:.98rem}
+
+/* ---------- wheels ---------- */
+.section-head{max-width:58ch;margin-bottom:clamp(2.5rem,5vw,4rem)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.25rem,2.4vw,2rem)}
+.card{
+  background:#fff;
+  border:1px solid var(--line-light);
+  border-radius:var(--radius);overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -24px rgba(27,14,51,.5)}
+.card img{width:100%;height:auto;aspect-ratio:16/11;object-fit:cover}
+.card__body{padding:clamp(1.25rem,2.2vw,1.75rem);display:flex;flex-direction:column;gap:.7rem;flex:1}
+.card h3{color:var(--void)}
+.card p{color:var(--haze);margin:0;font-size:.98rem}
+.card__meta{
+  margin-top:auto;padding-top:1rem;border-top:1px solid var(--line-light);
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--circuit);
+}
+
+/* ---------- usp ---------- */
+.usp{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2.5rem,5vw,5rem);align-items:start}
+.points{list-style:none;margin:2rem 0 0;padding:0;display:grid;gap:1.5rem}
+.points li{display:grid;grid-template-columns:auto 1fr;gap:1.1rem;align-items:start}
+.points .n{
+  font-family:var(--font-mono);font-size:.78rem;letter-spacing:.1em;
+  color:var(--volt);padding-top:.35rem;
+}
+.points strong{display:block;font-size:1.08rem;margin-bottom:.25rem}
+.points span.txt{color:var(--haze-soft);font-size:.98rem;display:block}
+.stats{display:grid;gap:1rem}
+.stat{
+  border:1px solid var(--line-dark);border-radius:var(--radius);
+  padding:clamp(1.25rem,2.4vw,1.75rem);
+  background:rgba(75,31,130,.22);
+}
+.stat b{
+  display:block;font-family:var(--font-display);font-weight:400;
+  font-size:clamp(2.6rem,1.6rem + 3.4vw,4.4rem);line-height:1;
+  color:var(--volt);margin-bottom:.5rem;
+}
+.stat span{
+  font-family:var(--font-mono);font-size:.74rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--haze-soft);
+}
+
+/* ---------- cases ---------- */
+.cases{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(1.25rem,2.5vw,2rem)}
+.case{
+  position:relative;overflow:hidden;border-radius:var(--radius);
+  border:1px solid var(--line-dark);
+  min-height:clamp(340px,38vw,460px);display:flex;
+}
+.case img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.case::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(13,11,20,.95) 8%,rgba(13,11,20,.62) 45%,rgba(13,11,20,.2) 100%);
+}
+.case__body{position:relative;z-index:1;margin-top:auto;padding:clamp(1.25rem,2.4vw,2rem)}
+.case__body p{color:var(--haze-soft);margin:.6rem 0 0;font-size:.98rem;max-width:46ch}
+
+/* ---------- cta ---------- */
+.cta{
+  background:linear-gradient(150deg,var(--circuit) 0%,#31165A 46%,var(--void) 100%);
+  position:relative;
+}
+.cta__grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(2.5rem,5vw,4.5rem);align-items:start}
+.cta__text p{color:#E6DFF0;max-width:40ch}
+.form{
+  background:rgba(13,11,20,.42);
+  border:1px solid rgba(247,244,239,.16);
+  border-radius:var(--radius);
+  padding:clamp(1.5rem,3vw,2.25rem);
+  display:grid;gap:1.1rem;
+}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.field{display:grid;gap:.45rem}
+.field label{
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--volt);
+}
+.field input,.field select,.field textarea{
+  font-family:var(--font-body);font-size:1rem;color:var(--paddock);
+  background:rgba(27,14,51,.72);
+  border:1px solid rgba(247,244,239,.22);
+  border-radius:10px;
+  padding:.8rem .95rem;min-height:48px;width:100%;
+}
+.field textarea{min-height:120px;resize:vertical}
+.field select{
+  appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23F4D93E' stroke-width='1.6' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 1rem center;background-size:12px 8px;
+  padding-right:2.6rem;
+}
+.field input::placeholder,.field textarea::placeholder{color:var(--haze-soft)}
+.form__note{
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;
+  color:#D9D1E6;text-transform:uppercase;margin:0;
+}
+.form__status{
+  font-family:var(--font-mono);font-size:.75rem;letter-spacing:.08em;
+  color:var(--volt);margin:0;min-height:1.2em;
+}
+
+/* ---------- footer ---------- */
+.footer{background:var(--pit);padding-block:clamp(3.5rem,7vw,5.5rem) 2rem}
+.footer__top{
+  display:grid;grid-template-columns:1.3fr repeat(3,1fr);
+  gap:clamp(2rem,4vw,3.5rem);
+  padding-bottom:clamp(2.5rem,5vw,3.5rem);
+  border-bottom:1px solid var(--line-dark);
+}
+.footer p{color:var(--haze-soft);font-size:.95rem;max-width:32ch}
+.footer h4{
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--volt);margin:0 0 1rem;font-weight:500;
+}
+.footer ul{list-style:none;margin:0;padding:0;display:grid;gap:.2rem}
+.footer ul a,.footer address a{
+  color:var(--haze-soft);text-decoration:none;font-size:.95rem;
+  display:inline-flex;align-items:center;min-height:44px;
+}
+.footer ul a:hover,.footer address a:hover{color:var(--volt)}
+.footer address{font-style:normal;display:grid;gap:.2rem}
+.footer__bottom{
+  padding-top:1.75rem;display:flex;flex-wrap:wrap;gap:.75rem 2rem;
+  justify-content:space-between;
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--haze-soft);
+}
+
+/* ---------- breakpoints ---------- */
+@media (max-width:900px){
+  .hero__grid{grid-template-columns:1fr}
+  .impl{grid-template-columns:1fr 1fr}
+  .cards{grid-template-columns:1fr 1fr}
+  .usp{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .cta__grid{grid-template-columns:1fr}
+  .footer__top{grid-template-columns:1fr 1fr}
+  .header__inner{flex-wrap:wrap;padding-block:.6rem;gap:.5rem 1rem}
+  .nav{
+    order:3;width:100%;margin-left:0;
+    overflow-x:auto;gap:1.25rem;
+    padding-bottom:.2rem;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(to right,#000 84%,transparent 100%);
+    mask-image:linear-gradient(to right,#000 84%,transparent 100%);
+  }
+  .nav::-webkit-scrollbar{display:none}
+  .header .btn{margin-left:auto}
+  :root{--header-h:118px}
+}
+@media (max-width:700px){
+  .impl{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+  .cases{grid-template-columns:1fr}
+  .panel{min-height:340px}
+  .footer__top{grid-template-columns:1fr}
+  .footer p{max-width:none}
+}
+@media (max-width:640px){
+  .t-long{display:none}
+  .t-short{display:inline}
+}
+@media (max-width:520px){
+  .row{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+  .hero__actions .btn{width:100%}
+  .brand{font-size:1rem}
+  .footer__bottom{flex-direction:column;gap:.4rem}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  .ticker__track{animation:none;transform:none}
+  .ticker{overflow-x:auto}
+}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 16px)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 32" aria-hidden="true" focusable="false"><path d="M14 0 2 18h7l-3 14 16-20h-8l4-12z" fill="currentColor"/></svg>
+      Eventwheelz
+    </a>
+    <nav class="nav" aria-label="Hoofdnavigatie">
+      <a href="#crew">Crew mobility</a>
+      <a href="#people">People mobility</a>
+      <a href="#branded">Branded mobility</a>
+      <a href="#cases">Cases</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn--primary btn--sm" href="#contact"><span class="t-long">Vraag een offerte aan</span><span class="t-short">Offerte</span></a>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <span class="eyebrow eyebrow--volt">Backstage mobility for events</span>
+      <h1>Stop walking.<br>Start <span class="mark">rolling.</span></h1>
+      <p class="lead">Eventwheelz houdt jouw evenement in beweging — van crew tot artiesten, met of zonder jouw merk erop. Geen wachttijd, geen gedoe, gewoon wielen waar en wanneer je ze nodig hebt.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#contact">Vraag een offerte aan</a>
+        <a class="btn btn--ghost" href="#wheels">Bekijk onze wheels</a>
+      </div>
+    </div>
+    <div class="hero__media">
+      <figure class="shot hero__shot" style="margin:0">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 700' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='a' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%233A1866'/><stop offset='.62' stop-color='%234B1F82'/><stop offset='1' stop-color='%231B0E33'/></linearGradient></defs><rect width='900' height='700' fill='url(%23a)'/><circle cx='665' cy='170' r='96' fill='%23F4D93E' opacity='.17'/><g fill='%23F4D93E' opacity='.10'><polygon points='170,0 235,0 320,540 55,540'/><polygon points='430,0 482,0 548,540 352,540'/><polygon points='690,0 748,0 862,540 640,540'/></g><rect y='596' width='900' height='104' fill='%231B0E33'/><g fill='%230D0B14' opacity='.5'><circle cx='70' cy='520' r='24'/><rect x='51' y='540' width='40' height='72' rx='18'/><circle cx='148' cy='534' r='20'/><rect x='132' y='551' width='34' height='62' rx='16'/><circle cx='828' cy='524' r='23'/><rect x='809' y='543' width='39' height='70' rx='17'/><circle cx='762' cy='540' r='19'/><rect x='747' y='556' width='32' height='58' rx='15'/></g><g fill='%230D0B14'><path d='M262 452h372a26 26 0 0 1 26 26v92H236v-92a26 26 0 0 1 26-26z'/><path d='M282 452l34-108h268l40 108z'/><rect x='300' y='330' width='300' height='16' rx='8'/><rect x='306' y='344' width='12' height='108'/><rect x='584' y='344' width='12' height='108'/></g><rect x='336' y='372' width='224' height='60' rx='10' fill='%23F4D93E' opacity='.4'/><g fill='%23F4D93E'><circle cx='318' cy='576' r='54'/><circle cx='606' cy='576' r='54'/></g><g fill='%230D0B14'><circle cx='318' cy='576' r='21'/><circle cx='606' cy='576' r='21'/></g></svg>" alt="Tuktuk van Eventwheelz op een festivalterrein in de avond, met publiek en lichtbundels op de achtergrond." width="900" height="700">
+      </figure>
+      <ul class="tags">
+        <li>E-choppers</li>
+        <li>Tuktuks</li>
+        <li>Topolino&rsquo;s</li>
+      </ul>
+    </div>
+  </div>
+  <svg class="edge edge--bottom" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="0,90 1440,10 1440,90" fill="#F4D93E"/></svg>
+</section>
+
+<div class="ticker">
+  <div class="ticker__track">
+    <ul class="ticker__list">
+      <li>Powered by Unieke Uitjes</li>
+      <li>Vertrouwd bij Zwarte Cross</li>
+      <li>Merkactivatie voor Rivella</li>
+      <li>Accu wisselen i.p.v. wachten</li>
+    </ul>
+    <ul class="ticker__list" aria-hidden="true">
+      <li>Powered by Unieke Uitjes</li>
+      <li>Vertrouwd bij Zwarte Cross</li>
+      <li>Merkactivatie voor Rivella</li>
+      <li>Accu wisselen i.p.v. wachten</li>
+    </ul>
+  </div>
+</div>
+
+<section class="section section--pit" id="implementaties">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow eyebrow--volt">Drie manieren om ons in te zetten</span>
+      <h2>Van backstage tot merkactivatie</h2>
+      <p class="muted-dark">Eén partij, drie inzetten. Vaak lopen ze door elkaar heen op hetzelfde terrein.</p>
+    </div>
+    <div class="impl">
+      <article class="panel" id="crew">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 900' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='b' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23241048'/><stop offset='1' stop-color='%230D0B14'/></linearGradient></defs><rect width='800' height='900' fill='url(%23b)'/><g stroke='%234B1F82' stroke-width='4' opacity='.55'><path d='M0 300h800M0 380h800M0 460h800'/><path d='M80 280v200M200 280v200M320 280v200M440 280v200M560 280v200M680 280v200'/></g><circle cx='150' cy='190' r='70' fill='%23F4D93E' opacity='.14'/><rect y='700' width='800' height='200' fill='%230D0B14'/><g fill='none' stroke='%23F4D93E' stroke-width='16' stroke-linecap='round' stroke-linejoin='round'><circle cx='215' cy='660' r='92'/><circle cx='600' cy='660' r='92'/><path d='M215 660h150l60-140h95'/><path d='M425 520l175 140'/><path d='M520 520l70-52'/><path d='M360 660l30-104h110'/></g><rect x='330' y='596' width='150' height='30' rx='14' fill='%234B1F82'/></svg>" alt="E-chopper backstage op een afgezet evenemententerrein bij avond." width="800" height="900">
+        <div class="panel__body">
+          <span class="panel__num">01 — Backstage</span>
+          <h3>Crew mobility</h3>
+          <p>E-choppers, fatbikes en e-steps zodat je crew nooit hoeft te wachten op vervoer over het terrein.</p>
+        </div>
+      </article>
+      <article class="panel" id="people">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 900' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='c' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%234B1F82'/><stop offset='1' stop-color='%23150B29'/></linearGradient></defs><rect width='800' height='900' fill='url(%23c)'/><circle cx='620' cy='200' r='120' fill='%23F4D93E' opacity='.16'/><g fill='%23F4D93E' opacity='.09'><polygon points='120,0 180,0 250,620 40,620'/><polygon points='520,0 575,0 700,620 470,620'/></g><rect y='690' width='800' height='210' fill='%23150B29'/><g fill='%230D0B14'><path d='M212 486h330a26 26 0 0 1 26 26v152H186V512a26 26 0 0 1 26-26z'/><path d='M232 486l32-104h236l38 104z'/><rect x='250' y='368' width='266' height='16' rx='8'/><rect x='256' y='382' width='12' height='104'/><rect x='500' y='382' width='12' height='104'/></g><rect x='282' y='412' width='196' height='56' rx='10' fill='%23F4D93E' opacity='.45'/><g fill='%23F4D93E'><circle cx='268' cy='670' r='54'/><circle cx='520' cy='670' r='54'/></g><g fill='%230D0B14'><circle cx='268' cy='670' r='21'/><circle cx='520' cy='670' r='21'/></g></svg>" alt="Tuktuk brengt gasten over het evenemententerrein." width="800" height="900">
+        <div class="panel__body">
+          <span class="panel__num">02 — Op het evenement</span>
+          <h3>People mobility</h3>
+          <p>Tuktuks en Topolino&rsquo;s brengen artiesten en gasten comfortabel en met allure van A naar B.</p>
+        </div>
+      </article>
+      <article class="panel" id="branded">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 900' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='d' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%235A2799'/><stop offset='1' stop-color='%231B0E33'/></linearGradient></defs><rect width='800' height='900' fill='url(%23d)'/><g fill='%23F4D93E' opacity='.12'><circle cx='140' cy='170' r='130'/><circle cx='690' cy='330' r='90'/></g><rect y='700' width='800' height='200' fill='%231B0E33'/><g fill='%23F4D93E'><path d='M196 512h300c34 0 52 18 62 46l22 62H176l-8-62c-4-28 14-46 28-46z'/><path d='M236 512l30-92c8-24 22-34 44-34h172c22 0 34 12 40 34l26 92z'/></g><path d='M266 434c6-20 14-26 30-26h158c16 0 24 8 28 26l14 52H252z' fill='%234B1F82'/><g fill='%230D0B14'><circle cx='268' cy='642' r='56'/><circle cx='512' cy='642' r='56'/></g><g fill='%23F4D93E'><circle cx='268' cy='642' r='22'/><circle cx='512' cy='642' r='22'/></g><rect x='214' y='548' width='140' height='26' rx='12' fill='%231B0E33' opacity='.5'/></svg>" alt="Voertuig volledig gewrapt in de huisstijl van een merk, als rijdende activatie op een evenement." width="800" height="900">
+        <div class="panel__body">
+          <span class="panel__num">03 — Merkactivatie</span>
+          <h3>Branded mobility</h3>
+          <p>Onze voertuigen volledig in jouw huisstijl gewrapt — zoals we deden voor Rivella.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+  <svg class="edge edge--bottom" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="0,90 1440,20 1440,90" fill="#F7F4EF"/></svg>
+</section>
+
+<section class="section section--light on-light" id="wheels">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow eyebrow--circuit">Onze wheels</span>
+      <h2>Wat er op het terrein staat</h2>
+      <p class="muted-light">Alles elektrisch, alles onderhouden, alles inzetbaar vanaf één voertuig tot een complete vloot.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 550' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='e' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%234B1F82'/><stop offset='1' stop-color='%231B0E33'/></linearGradient></defs><rect width='800' height='550' fill='url(%23e)'/><circle cx='650' cy='110' r='90' fill='%23F4D93E' opacity='.15'/><g fill='none' stroke='%23F4D93E' stroke-width='15' stroke-linecap='round' stroke-linejoin='round'><circle cx='210' cy='378' r='88'/><circle cx='590' cy='378' r='88'/><path d='M210 378h146l58-136h92'/><path d='M414 242l176 136'/><path d='M506 242l68-50'/><path d='M352 378l30-100h106'/></g><rect x='324' y='314' width='146' height='28' rx='13' fill='%23F7F4EF' opacity='.2'/></svg>" alt="E-chopper van Eventwheelz, zijaanzicht." width="800" height="550">
+        <div class="card__body">
+          <h3>E-choppers &amp; fatbikes</h3>
+          <p>Snel, wendbaar en ideaal om backstage grote afstanden te overbruggen — zonder dat je crew hoeft te wachten.</p>
+          <p class="card__meta">Inzet: Crew mobility</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 550' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='f' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%235A2799'/><stop offset='1' stop-color='%23241048'/></linearGradient></defs><rect width='800' height='550' fill='url(%23f)'/><circle cx='140' cy='120' r='100' fill='%23F4D93E' opacity='.14'/><g fill='%230D0B14'><path d='M244 268h318a26 26 0 0 1 26 26v134H218V294a26 26 0 0 1 26-26z'/><path d='M264 268l30-98h226l36 98z'/><rect x='282' y='158' width='250' height='15' rx='7'/><rect x='288' y='170' width='11' height='98'/><rect x='516' y='170' width='11' height='98'/></g><rect x='310' y='198' width='186' height='52' rx='10' fill='%23F4D93E' opacity='.45'/><g fill='%23F4D93E'><circle cx='296' cy='434' r='50'/><circle cx='536' cy='434' r='50'/></g><g fill='%230D0B14'><circle cx='296' cy='434' r='19'/><circle cx='536' cy='434' r='19'/></g></svg>" alt="Tuktuk van Eventwheelz, zijaanzicht." width="800" height="550">
+        <div class="card__body">
+          <h3>Tuktuks</h3>
+          <p>Comfortabel groepsvervoer met karakter — perfect voor pendeldiensten en het rondrijden van gasten.</p>
+          <p class="card__meta">Inzet: People mobility</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 550' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%234B1F82'/><stop offset='1' stop-color='%230D0B14'/></linearGradient></defs><rect width='800' height='550' fill='url(%23g)'/><circle cx='660' cy='130' r='96' fill='%23F4D93E' opacity='.13'/><g fill='%23F7F4EF'><path d='M212 300h330c36 0 54 18 64 46l20 58H192l-8-58c-4-28 14-46 28-46z'/><path d='M252 300l30-84c8-22 22-32 44-32h164c22 0 34 10 40 32l26 84z'/></g><path d='M282 232c6-18 14-24 28-24h146c16 0 24 6 28 24l12 46H272z' fill='%234B1F82'/><g fill='%230D0B14'><circle cx='288' cy='424' r='52'/><circle cx='524' cy='424' r='52'/></g><g fill='%23F4D93E'><circle cx='288' cy='424' r='20'/><circle cx='524' cy='424' r='20'/></g></svg>" alt="Topolino van Eventwheelz, zijaanzicht." width="800" height="550">
+        <div class="card__body">
+          <h3>Topolino&rsquo;s</h3>
+          <p>Compact en stijlvol vervoer met VIP-uitstraling — én ons meest gevraagde canvas voor een volledige wrap.</p>
+          <p class="card__meta">Inzet: People &amp; branded</p>
+        </div>
+      </article>
+    </div>
+  </div>
+  <svg class="edge edge--bottom" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="0,90 1440,90 0,20" fill="#1B0E33"/></svg>
+</section>
+
+<section class="section" id="nooit-stilstand" style="background:var(--void)">
+  <div class="wrap usp">
+    <div>
+      <span class="eyebrow eyebrow--volt">Nooit stilstand</span>
+      <h2>Een lege accu stopt je event niet</h2>
+      <p class="muted-dark">Wachten op een oplader kost je dagdeel. Daarom werken we met wisselaccu&rsquo;s en zetten we standaard reserve klaar.</p>
+      <ul class="points">
+        <li>
+          <span class="n">01</span>
+          <span><strong>Accu wisselen, niet omruilen</strong><span class="txt">De accu gaat eruit en een volle gaat erin. Het voertuig blijft waar het is en rijdt meteen verder.</span></span>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <span><strong>Standaard een reserve-accu erbij</strong><span class="txt">Bij elke 5 e-choppers krijg je 1 extra accu gratis mee.</span></span>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <span><strong>Een eigen laadstation vanaf 25 stuks</strong><span class="txt">Huur je 25 voertuigen of meer, dan zetten we een gratis accukast op het terrein.</span></span>
+        </li>
+      </ul>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>0 min.</b><span>Wachttijd bij accu-wissel</span></div>
+      <div class="stat"><b>1/5</b><span>Gratis extra accu per 5 e-choppers</span></div>
+      <div class="stat"><b>25+</b><span>Voertuigen voor gratis accukast</span></div>
+    </div>
+  </div>
+  <svg class="edge edge--bottom" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="0,90 1440,90 1440,20" fill="#0D0B14"/></svg>
+</section>
+
+<section class="section section--pit" id="cases">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow eyebrow--volt">Cases</span>
+      <h2>Waar we al reden</h2>
+    </div>
+    <div class="cases">
+      <article class="case">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='h' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23301459'/><stop offset='1' stop-color='%230D0B14'/></linearGradient></defs><rect width='900' height='620' fill='url(%23h)'/><g fill='%23F4D93E' opacity='.12'><polygon points='210,0 268,0 350,470 120,470'/><polygon points='600,0 655,0 780,470 520,470'/></g><circle cx='450' cy='120' r='86' fill='%23F4D93E' opacity='.14'/><rect y='512' width='900' height='108' fill='%230D0B14'/><g fill='%230D0B14' opacity='.75'><circle cx='96' cy='420' r='26'/><rect x='75' y='442' width='42' height='78' rx='19'/><circle cx='178' cy='432' r='22'/><rect x='161' y='450' width='36' height='70' rx='17'/><circle cx='770' cy='424' r='25'/><rect x='750' y='444' width='41' height='76' rx='18'/><circle cx='842' cy='438' r='21'/><rect x='826' y='456' width='34' height='64' rx='16'/></g><g fill='%230D0B14'><path d='M300 366h300a24 24 0 0 1 24 24v106H276V390a24 24 0 0 1 24-24z'/><path d='M320 366l28-92h212l34 92z'/></g><rect x='362' y='300' width='176' height='50' rx='10' fill='%23F4D93E' opacity='.4'/><g fill='%23F4D93E'><circle cx='348' cy='500' r='46'/><circle cx='568' cy='500' r='46'/></g><g fill='%230D0B14'><circle cx='348' cy='500' r='18'/><circle cx='568' cy='500' r='18'/></g></svg>" alt="Tuktuk-shuttle tussen de camping en het festivalterrein tijdens de Zwarte Cross." width="900" height="620">
+        <div class="case__body">
+          <span class="eyebrow eyebrow--volt" style="margin-bottom:.6rem">Zwarte Cross</span>
+          <h3>Shuttle vanaf de camping, e-choppers voor de crew</h3>
+          <p>Tuktuks reden bezoekers heen en weer tussen camping en terrein. De crew ging tegelijk op e-choppers het terrein over, zodat niemand hoefde te lopen of te wachten.</p>
+        </div>
+      </article>
+      <article class="case">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='i' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%236028A6'/><stop offset='1' stop-color='%231B0E33'/></linearGradient></defs><rect width='900' height='620' fill='url(%23i)'/><g fill='%23F4D93E' opacity='.13'><circle cx='150' cy='140' r='120'/><circle cx='760' cy='260' r='84'/></g><rect y='520' width='900' height='100' fill='%231B0E33'/><g fill='%23F4D93E'><path d='M300 356h304a26 26 0 0 1 26 26v122H274V382a26 26 0 0 1 26-26z'/><path d='M322 356l28-94h214l36 94z'/><rect x='340' y='250' width='236' height='14' rx='7'/></g><rect x='356' y='288' width='190' height='52' rx='10' fill='%234B1F82'/><rect x='306' y='396' width='170' height='30' rx='14' fill='%231B0E33' opacity='.45'/><g fill='%230D0B14'><circle cx='352' cy='508' r='48'/><circle cx='572' cy='508' r='48'/></g><g fill='%23F4D93E'><circle cx='352' cy='508' r='19'/><circle cx='572' cy='508' r='19'/></g></svg>" alt="Volledig gewrapte tuktuk als merkactivatie voor Rivella." width="900" height="620">
+        <div class="case__body">
+          <span class="eyebrow eyebrow--volt" style="margin-bottom:.6rem">Rivella</span>
+          <h3>Een rijdende merkactivatie</h3>
+          <p>Een tuktuk volledig gewrapt in de huisstijl van Rivella. Zichtbaar over het hele terrein, en niet als statische stand maar als voertuig dat blijft rijden.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section cta" id="contact">
+  <div class="wrap cta__grid">
+    <div class="cta__text">
+      <span class="eyebrow eyebrow--volt">Contact</span>
+      <h2>Klaar om je event in beweging te zetten?</h2>
+      <p>Vertel kort wat je nodig hebt: hoeveel voertuigen, welk terrein, welke dagen. Je krijgt een offerte op maat terug, geen standaardlijstje.</p>
+      <p class="muted-dark" style="color:#D9D1E6">Powered by Unieke Uitjes.</p>
+    </div>
+    <form class="form" id="offerte" novalidate>
+      <div class="row">
+        <div class="field">
+          <label for="naam">Naam</label>
+          <input id="naam" name="naam" type="text" autocomplete="name" placeholder="Je naam" required>
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="jij@evenement.nl" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="inzet">Type inzet</label>
+          <select id="inzet" name="inzet" required>
+            <option value="">Maak een keuze</option>
+            <option value="crew">Crew mobility</option>
+            <option value="people">People mobility</option>
+            <option value="branded">Branded mobility</option>
+            <option value="combinatie">Combinatie</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="aantal">Indicatie aantal voertuigen</label>
+          <input id="aantal" name="aantal" type="number" min="1" step="1" inputmode="numeric" placeholder="Bijv. 12">
+        </div>
+      </div>
+      <div class="field">
+        <label for="bericht">Waar gaat het om?</label>
+        <textarea id="bericht" name="bericht" placeholder="Welk evenement, welke data, wat wil je bereiken?"></textarea>
+      </div>
+      <button class="btn btn--primary" type="submit">Verstuur aanvraag</button>
+      <p class="form__status" role="status" aria-live="polite" id="formStatus"></p>
+      <p class="form__note">Je krijgt binnen een werkdag antwoord. Dit is een offerte-aanvraag, geen boeking.</p>
+    </form>
+  </div>
+  <svg class="edge edge--bottom" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="0,90 1440,90 1440,25" fill="#0D0B14"/></svg>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 24 32" aria-hidden="true" focusable="false"><path d="M14 0 2 18h7l-3 14 16-20h-8l4-12z" fill="currentColor"/></svg>
+          Eventwheelz
+        </a>
+        <p>Backstage mobility for events. Powered by Unieke Uitjes.</p>
+      </div>
+      <div>
+        <h4>Mobility</h4>
+        <ul>
+          <li><a href="#crew">Crew mobility</a></li>
+          <li><a href="#people">People mobility</a></li>
+          <li><a href="#branded">Branded mobility</a></li>
+          <li><a href="#wheels">Onze wheels</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Eventwheelz</h4>
+        <ul>
+          <li><a href="#cases">Cases</a></li>
+          <li><a href="#nooit-stilstand">Nooit stilstand</a></li>
+          <li><a href="#contact">Offerte aanvragen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <!-- TODO: echte contactgegevens invullen, dit zijn placeholders -->
+        <address>
+          <a href="mailto:info@eventwheelz.nl">info@eventwheelz.nl</a>
+          <a href="tel:+310000000000">+31 (0)00 000 00 00</a>
+          <span style="color:var(--haze-soft);font-size:.95rem">Landelijke inzet, hele jaar door</span>
+        </address>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; <span id="jaar">2026</span> Eventwheelz — onderdeel van Unieke Uitjes</span>
+      <span>Stop walking, start rolling.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('jaar').textContent = new Date().getFullYear();
+
+/* Offerteformulier. Koppel hier je eigen endpoint (Netlify Forms, e-mail-API, CRM).
+   Zolang dat er niet is, bevestigen we alleen zichtbaar in de pagina. */
+var form = document.getElementById('offerte');
+var status = document.getElementById('formStatus');
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var naam = form.naam.value.trim();
+  var email = form.email.value.trim();
+  var inzet = form.inzet.value;
+  if (!naam || !email.includes('@') || !inzet) {
+    status.textContent = 'Vul je naam, e-mailadres en type inzet in.';
+    return;
+  }
+  status.textContent = 'Bedankt ' + naam + '. Je aanvraag staat klaar, we mailen je terug.';
+  form.reset();
+});
+</script>
+</body>
+</html>

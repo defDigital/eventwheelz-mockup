@@ -1,0 +1,67 @@
+/* ==========================================================================
+   EVENTWHEELZ — design tokens
+   Kleuren uit de huisstijl van Unieke Uitjes, zoals goedgekeurd in v3 donker.
+
+   In Webflow worden dit variabelen. Dezelfde namen aanhouden, dan is de
+   overzetting één op één.
+
+   CONTRAST — nagerekend, niet geschat (WCAG 2.1 relatieve luminantie).
+   Achtergrond ......... wit    body   muted  geel
+   --navy   #0a3a6e ....  11,39   8,83   7,13   7,85
+   --deep   #14364a ....  12,68   9,83   7,93   8,74
+   --blue   #0f4e96 ....   8,23   6,38   5,15   5,67
+   --card   #0d4380 ....   9,85   7,63   6,16   6,79
+   --ice    #ebf6fe ....  navy 10,39   |   grey 8,70
+   Alles boven 4,5. Geel nooit als tekst op --ice zetten: dat is 1,3.
+   Op licht is --grey de bodykleur en --navy de kopkleur.
+   ========================================================================== */
+
+:root{
+  /* merk */
+  --navy:#0a3a6e;
+  --blue:#0f4e96;
+  --deep:#14364a;
+  --yellow:#ffd206;
+  --ice:#ebf6fe;
+  --grey:#3b474f;
+  --white:#ffffff;
+
+  /* rollen op donker */
+  --page-bg:var(--navy);
+  --band-bg:var(--deep);
+  --alt-bg:var(--blue);
+  --card-bg:#0d4380;
+  --line:rgba(255,255,255,.14);
+
+  --heading:var(--white);
+  --body:#d6e4f5;
+  --muted:#b8cfe9;
+  --accent:var(--yellow);
+  --accent-text:var(--navy);
+
+  /* rollen op licht */
+  --light-bg:var(--ice);
+  --light-heading:var(--navy);
+  --light-body:var(--grey);
+  --light-line:rgba(10,58,110,.14);
+
+  /* letters */
+  --f-display:'Anton','Arial Narrow',sans-serif;
+  --f-body:'Open Sans','Segoe UI',sans-serif;
+
+  /* maten — veelvouden van 4, zodat ze in Webflow in te tikken zijn */
+  --s-1:4px;  --s-2:8px;  --s-3:12px; --s-4:16px;
+  --s-5:24px; --s-6:32px; --s-7:48px; --s-8:64px;
+  --s-9:96px; --s-10:128px;
+
+  --wrap:1180px;
+  --radius:8px;        /* kaarten en panelen */
+  --radius-pill:999px; /* knoppen en badges */
+
+  /* Vloeiende koppen. Dit is de enige plek waar we clamp() gebruiken.
+     In Webflow wordt dit één custom-code regel, of drie vaste maten
+     per breakpoint. Staat in het overzetdocument. */
+  --h1:clamp(2.4rem, 1.4rem + 4.4vw, 4.6rem);
+  --h2:clamp(1.9rem, 1.3rem + 2.6vw, 3.1rem);
+  --h3:clamp(1.25rem, 1.1rem + .7vw, 1.6rem);
+}

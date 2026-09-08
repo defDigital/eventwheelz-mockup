@@ -1,0 +1,44 @@
+---
+import HeroSlider from './HeroSlider.astro';
+import { link } from '../lib/pad';
+const pad = Astro.url.pathname;
+---
+<section class="hero">
+  <div class="hero-media"><HeroSlider /></div>
+  <div class="hero-overlay"></div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow">Backstage mobility for events</span>
+    <h1>Stop walking.<br />Start rolling.</h1>
+    <p class="hero-tekst">
+      Van crewvervoer backstage tot artiesten en gasten op het terrein.
+      Eventwheelz levert de voertuigen, de accu&rsquo;s en de logistiek.
+      Jij houdt je evenement in beweging.
+    </p>
+    <div class="hero-acties">
+      <a class="button is-primary" href={link(pad, '/contact')}>Offerte aanvragen</a>
+      <a class="button is-outline" href={link(pad, '/voertuigen')}>Bekijk onze wheels</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero{position:relative;min-height:660px;display:flex;align-items:center;overflow:hidden;}
+  .hero-media{position:absolute;inset:0;}
+  .hero-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(90deg,
+      rgba(8,30,58,.92) 0%,
+      rgba(8,30,58,.78) 42%,
+      rgba(8,30,58,.35) 100%);
+  }
+  .hero-inner{position:relative;z-index:2;padding-block:var(--s-9);}
+  .hero-tekst{margin-top:var(--s-5);max-width:46ch;color:#e2ecf8;font-size:1.06rem;}
+  .hero-acties{display:flex;flex-wrap:wrap;gap:var(--s-3);margin-top:var(--s-6);}
+
+  @media (max-width:991px){ .hero{min-height:560px;} }
+  @media (max-width:767px){
+    .hero{min-height:0;}
+    .hero-overlay{background:linear-gradient(0deg,rgba(8,30,58,.94) 30%,rgba(8,30,58,.7) 100%);}
+    .hero-inner{padding-block:var(--s-8) var(--s-10);}
+  }
+</style>

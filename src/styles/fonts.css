@@ -1,0 +1,13 @@
+/* Zelf gehost, zodat de ZIP ook zonder internet de goede letters laat zien.
+   Anton vervangt Gill Sans Ultra Bold Condensed, dat een betaalde letter is.
+   In Webflow upload je deze twee bestanden onder Site settings > Fonts. */
+@font-face{
+  font-family:'Anton';
+  src:url('/font/anton-latin.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Open Sans';
+  src:url('/font/opensans-latin.woff2') format('woff2');
+  font-weight:300 800;font-style:normal;font-display:swap;
+}

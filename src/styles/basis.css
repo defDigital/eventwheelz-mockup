@@ -1,0 +1,283 @@
+/* ==========================================================================
+   EVENTWHEELZ — basis en componenten
+
+   Naamgeving volgt Webflow: een basisclass plus een combo-class die met
+   `is-` begint. `.button` + `.is-primary` wordt in Webflow letterlijk
+   dezelfde constructie. Geen geneste selectors dieper dan één niveau,
+   want die kun je in Webflow niet maken.
+
+   Breakpoints zijn die van Webflow: 991, 767 en 479 pixels.
+   ========================================================================== */
+
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body{
+  margin:0;
+  background:var(--page-bg);
+  color:var(--body);
+  font-family:var(--f-body);
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+img{max-width:100%;display:block;}
+a{color:inherit;}
+p{margin:0;}
+ul{margin:0;padding:0;list-style:none;}
+
+h1,h2,h3{
+  font-family:var(--f-display);
+  font-weight:400;
+  color:var(--heading);
+  margin:0;
+  line-height:1.06;
+  text-transform:uppercase;
+  letter-spacing:.01em;
+  text-wrap:balance;
+}
+h1{font-size:var(--h1);}
+h2{font-size:var(--h2);}
+h3{font-size:var(--h3);}
+
+h4{
+  margin:0;
+  font-family:var(--f-body);
+  font-weight:700;
+  font-size:1.02rem;
+  color:var(--heading);
+}
+
+:where(a,button,input,select,textarea):focus-visible{
+  outline:3px solid var(--accent);
+  outline-offset:3px;
+}
+
+/* --- layout ------------------------------------------------------------ */
+.wrap{
+  width:100%;
+  max-width:var(--wrap);
+  margin-inline:auto;
+  padding-inline:var(--s-5);
+}
+
+.section{padding-block:var(--s-9);}
+.section.is-band{background:var(--band-bg);}
+.section.is-alt{background:var(--alt-bg);}
+.section.is-light{background:var(--light-bg);color:var(--light-body);}
+.section.is-light h1,
+.section.is-light h2,
+.section.is-light h3,
+.section.is-light h4{color:var(--light-heading);}
+
+.section-head{margin-bottom:var(--s-7);}
+.section-head p{margin-top:var(--s-4);color:var(--muted);max-width:58ch;}
+.section.is-light .section-head p{color:var(--light-body);}
+
+.eyebrow{
+  display:block;
+  font-family:var(--f-body);
+  font-weight:700;
+  font-size:.78rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:var(--s-3);
+}
+.section.is-light .eyebrow{color:var(--blue);}
+
+/* --- knoppen ----------------------------------------------------------- */
+.button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--s-2);
+  min-height:48px;
+  padding:var(--s-3) var(--s-5);
+  border:2px solid transparent;
+  border-radius:var(--radius-pill);
+  font-family:var(--f-body);
+  font-weight:700;
+  font-size:.9rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  transition:transform .15s ease,background-color .15s ease,color .15s ease;
+}
+.button:hover{transform:translateY(-2px);}
+.button.is-primary{background:var(--accent);color:var(--accent-text);}
+.button.is-primary:hover{background:#ffdd3d;}
+.button.is-outline{border-color:var(--white);color:var(--white);}
+.button.is-outline:hover{background:rgba(255,255,255,.1);}
+.section.is-light .button.is-outline{border-color:var(--navy);color:var(--navy);}
+.section.is-light .button.is-outline:hover{background:rgba(10,58,110,.07);}
+
+/* --- kaarten ----------------------------------------------------------- */
+.card{
+  display:flex;
+  flex-direction:column;
+  background:var(--card-bg);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  text-decoration:none;
+  transition:transform .18s ease,border-color .18s ease;
+}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.3);}
+.card-image{aspect-ratio:4/3;overflow:hidden;background:var(--deep);}
+.card-image img{width:100%;height:100%;object-fit:cover;}
+.card-body{display:flex;flex-direction:column;gap:var(--s-3);padding:var(--s-5);flex:1;}
+.card-body p{color:var(--muted);font-size:.95rem;}
+
+/* Prijsbadge, zoals in de goedgekeurde v3: gele tekst op een donkere pil. */
+.price{
+  margin-top:auto;
+  align-self:flex-start;
+  display:inline-flex;
+  align-items:center;
+  padding:var(--s-2) var(--s-4);
+  border-radius:var(--radius-pill);
+  background:rgba(10,32,60,.45);
+  font-weight:700;
+  font-size:.9rem;
+  color:var(--accent);
+}
+
+/* --- rasters ----------------------------------------------------------- */
+.grid{display:grid;gap:var(--s-5);}
+.grid.is-2{grid-template-columns:repeat(2,1fr);}
+.grid.is-3{grid-template-columns:repeat(3,1fr);}
+.grid.is-4{grid-template-columns:repeat(4,1fr);}
+
+/* --- skip-link --------------------------------------------------------- */
+.skip-link{
+  position:absolute;left:-9999px;top:0;z-index:100;
+  background:var(--accent);color:var(--accent-text);
+  padding:var(--s-3) var(--s-4);
+  font-weight:700;text-decoration:none;
+}
+.skip-link:focus{left:var(--s-4);top:var(--s-4);}
+
+/* --- Webflow-breakpoints ----------------------------------------------- */
+@media (max-width:991px){
+  .section{padding-block:var(--s-8);}
+  .grid.is-4{grid-template-columns:repeat(2,1fr);}
+  .grid.is-3{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:767px){
+  .section{padding-block:var(--s-7);}
+  .grid.is-3,.grid.is-2{grid-template-columns:1fr;}
+}
+@media (max-width:479px){
+  .grid.is-4{grid-template-columns:1fr;}
+  .button{width:100%;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+/* --- fotopaneel (inzet-blokken) ---------------------------------------- */
+.panel{
+  position:relative;
+  display:flex;
+  min-height:420px;
+  border-radius:var(--radius);
+  overflow:hidden;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.panel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.panel::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(0deg,
+    rgba(10,32,60,.94) 0%,
+    rgba(10,32,60,.86) 40%,
+    rgba(10,32,60,.34) 64%,
+    rgba(10,32,60,.14) 100%);
+}
+.panel-body{position:relative;z-index:1;margin-top:auto;padding:var(--s-5);}
+.panel-num{
+  display:block;
+  font-weight:700;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:var(--s-2);
+}
+.panel-body h3{margin-bottom:var(--s-2);}
+.panel-body p{color:var(--body);font-size:.95rem;}
+/* Drie regels reserveren zodat de koppen van de panelen op één lijn staan. */
+@media (min-width:992px){ .panel-body p{min-height:4.6em;} }
+
+/* --- genummerde lijst en statcijfers ----------------------------------- */
+.usp-list{display:flex;flex-direction:column;gap:var(--s-5);margin-top:var(--s-6);}
+.usp-item{display:grid;grid-template-columns:auto 1fr;gap:var(--s-4);}
+.usp-num{font-weight:700;font-size:.85rem;color:var(--accent);padding-top:2px;}
+.usp-item p{color:var(--body);font-size:.95rem;margin-top:var(--s-1);}
+.usp-note{display:block;margin-top:var(--s-2);font-size:.82rem;color:var(--muted);}
+
+.stats{display:flex;flex-direction:column;gap:var(--s-6);}
+.stat{border-left:3px solid var(--accent);padding-left:var(--s-4);}
+.stat-num{
+  display:block;
+  font-family:var(--f-display);
+  font-size:clamp(2.2rem,1.6rem + 2.4vw,3.4rem);
+  line-height:1;color:var(--accent);
+}
+.stat-label{
+  display:block;margin-top:var(--s-2);
+  font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--body);
+}
+
+/* --- formulier --------------------------------------------------------- */
+.form{
+  background:rgba(8,32,62,.55);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:var(--s-6);
+  display:flex;flex-direction:column;gap:var(--s-4);
+}
+.field{display:flex;flex-direction:column;gap:var(--s-2);}
+.field label{
+  font-weight:700;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--white);
+}
+.field input,.field select,.field textarea{
+  font-family:var(--f-body);font-size:.95rem;
+  min-height:48px;
+  padding:var(--s-3) var(--s-4);
+  background:#f2f6fa;
+  color:#132a45;
+  border:1px solid transparent;
+  border-radius:var(--radius);
+  width:100%;
+}
+.field textarea{min-height:112px;resize:vertical;}
+.field input::placeholder,.field textarea::placeholder{color:#5d708a;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-4);}
+.form-note{font-size:.82rem;color:var(--muted);}
+.form-status{font-weight:700;font-size:.88rem;color:var(--accent);min-height:1.2em;}
+@media (max-width:479px){ .form-row{grid-template-columns:1fr;} }
+
+/* --- case-kaart -------------------------------------------------------- */
+.case-card{
+  background:var(--alt-bg);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:var(--s-6);
+  display:flex;flex-direction:column;gap:var(--s-4);
+  text-decoration:none;
+}
+.case-card h3{font-size:1.4rem;text-transform:none;}
+.case-card p{color:var(--body);}
+.case-rol{
+  margin-top:auto;
+  font-weight:700;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);
+}

@@ -1,0 +1,14 @@
+---
+import { link } from '../lib/pad';
+interface Props { naar: string; label: string; }
+const { naar, label } = Astro.props;
+---
+<a class="kruimel" href={link(Astro.url.pathname, naar)}>&#8249; {label}</a>
+
+<style>
+  .kruimel{
+    display:inline-flex;align-items:center;min-height:44px;
+    color:var(--muted);text-decoration:none;font-weight:700;font-size:.85rem;
+  }
+  .kruimel:hover{color:var(--white);}
+</style>

@@ -1,0 +1,143 @@
+---
+import { getCollection, getEntries } from 'astro:content';
+import { Image } from 'astro:assets';
+import Basis from '../../layouts/Basis.astro';
+import PaginaKop from '../../components/PaginaKop.astro';
+import Kruimel from '../../components/Kruimel.astro';
+import CtaBlok from '../../components/CtaBlok.astro';
+import { foto } from '../../lib/beeld';
+import { link } from '../../lib/pad';
+
+export async function getStaticPaths() {
+  const voertuigen = await getCollection('voertuigen');
+  return voertuigen.map((v) => ({ params: { slug: v.data.slug }, props: { voertuig: v } }));
+}
+
+const { voertuig } = Astro.props;
+const d = voertuig.data;
+const pad = Astro.url.pathname;
+const inzet = await getEntries(d.inzet);
+
+const specs = [
+  { label: 'Aantal personen', waarde: d.aantalPersonen },
+  { label: 'Actieradius', waarde: d.actieradius },
+  { label: 'Rijbewijs', waarde: d.rijbewijs },
+];
+const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
+---
+<Basis titel={`${d.naam} huren — Eventwheelz`} omschrijving={d.kort}>
+  <PaginaKop eyebrow="Onze wheels" titel={d.naam} intro={d.kort}>
+    {d.vanafprijs !== null && (
+      <p class="kop-prijs">v.a. &euro; {d.vanafprijs},- {d.prijsEenheid}</p>
+    )}
+  </PaginaKop>
+
+  <section class="section">
+    <div class="wrap detail">
+      <div class="detail-hoofd">
+        <Kruimel naar="/voertuigen" label="Alle wheels" />
+
+        {beelden.length > 0 && (
+          <div class="galerij">
+            {beelden.map((b, i) => {
+              const beeld = foto(b);
+              return beeld ? (
+                <Image src={beeld} alt={`${d.naam} van Eventwheelz`} widths={[600, 1000]}
+                       sizes="(max-width:767px) 100vw, 700px" loading={i === 0 ? 'eager' : 'lazy'} />
+              ) : null;
+            })}
+          </div>
+        )}
+
+        <div class="detail-tekst">
+          {d.lang.map((alinea: string) => <p>{alinea}</p>)}
+        </div>
+
+        {inzet.length > 0 && (
+          <div class="koppeling">
+            <h2>Waarvoor je hem inzet</h2>
+            <div class="koppeling-lijst">
+              {inzet.map((u) => (
+                <a class="chip" href={link(pad, `/inzet/${u.data.slug}`)}>{u.data.naam}</a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <aside class="detail-zij">
+        <div class="paneel">
+          <h2 class="paneel-kop">Specificaties</h2>
+          <dl class="specs">
+            {specs.map((s) => (
+              <div class="spec-rij">
+                <dt>{s.label}</dt>
+                <dd>{s.waarde ?? 'Nog aanleveren'}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div class="paneel">
+          <h2 class="paneel-kop">Bij de prijs inbegrepen</h2>
+          <ul class="inbegrepen-lijst">
+            {d.inbegrepen.map((i: string) => <li>{i}</li>)}
+          </ul>
+          {d.accuwissel && (
+            <p class="paneel-note">Accu wisselen in plaats van omruilen. Bij elke 5 stuks 1 extra accu gratis mee.</p>
+          )}
+        </div>
+
+        <a class="button is-primary paneel-cta" href={link(pad, '/contact')}>Offerte aanvragen</a>
+      </aside>
+    </div>
+  </section>
+
+  <CtaBlok huidigPad={pad} />
+</Basis>
+
+<style>
+  .kop-prijs{
+    margin-top:var(--s-5);
+    display:inline-flex;align-items:center;
+    padding:var(--s-2) var(--s-4);
+    border-radius:var(--radius-pill);
+    background:rgba(8,30,58,.45);
+    font-weight:700;color:var(--accent);
+  }
+  .detail{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-8);align-items:start;}
+  .galerij{display:grid;gap:var(--s-4);margin-top:var(--s-4);}
+  .galerij :global(img){width:100%;height:auto;border-radius:var(--radius);}
+  .detail-tekst{margin-top:var(--s-6);display:flex;flex-direction:column;gap:var(--s-4);}
+  .detail-tekst p{color:var(--body);}
+
+  .koppeling{margin-top:var(--s-7);}
+  .koppeling h2{font-size:1.3rem;margin-bottom:var(--s-4);}
+  .koppeling-lijst{display:flex;flex-wrap:wrap;gap:var(--s-3);}
+  .chip{
+    display:inline-flex;align-items:center;min-height:44px;
+    padding:0 var(--s-4);
+    border:1px solid var(--line);border-radius:var(--radius-pill);
+    color:var(--white);text-decoration:none;font-weight:700;font-size:.85rem;
+  }
+  .chip:hover{border-color:var(--accent);color:var(--accent);}
+
+  .detail-zij{display:flex;flex-direction:column;gap:var(--s-4);position:sticky;top:110px;}
+  .paneel{background:var(--band-bg);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s-5);}
+  .paneel-kop{font-size:1.05rem;margin-bottom:var(--s-4);}
+  .specs{margin:0;}
+  .spec-rij{display:flex;justify-content:space-between;gap:var(--s-4);padding:var(--s-3) 0;border-top:1px solid var(--line);}
+  .spec-rij:first-child{border-top:0;}
+  .spec-rij dt{color:var(--muted);font-size:.9rem;}
+  .spec-rij dd{margin:0;color:var(--white);font-weight:700;font-size:.9rem;text-align:right;}
+  .inbegrepen-lijst{display:flex;flex-direction:column;gap:var(--s-2);}
+  .inbegrepen-lijst li{color:var(--body);font-size:.92rem;padding-left:var(--s-4);position:relative;}
+  .inbegrepen-lijst li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  .paneel-note{margin-top:var(--s-4);padding-top:var(--s-4);border-top:1px solid var(--line);color:var(--muted);font-size:.86rem;}
+  .paneel-cta{width:100%;}
+
+  @media (max-width:991px){
+    .detail{grid-template-columns:1fr;gap:var(--s-6);}
+    .detail-zij{position:static;}
+  }
+</style>

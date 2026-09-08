@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+const usecases = (await getCollection('usecases')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+---
+<form class="form" id="offerte-form" novalidate>
+  <div class="form-row">
+    <div class="field">
+      <label for="naam">Naam</label>
+      <input id="naam" name="naam" type="text" placeholder="Voor- en achternaam" required />
+    </div>
+    <div class="field">
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" placeholder="jij@bedrijf.nl" required />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <label for="inzet">Type inzet</label>
+      <select id="inzet" name="inzet" required>
+        <option value="" selected disabled>Maak een keuze</option>
+        {usecases.map((u) => <option value={u.data.slug}>{u.data.naam}</option>)}
+        <option value="combinatie">Combinatie</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="aantal">Aantal voertuigen</label>
+      <input id="aantal" name="aantal" type="text" placeholder="Bijv. 10 tot 15" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="bericht">Vertel over je evenement</label>
+    <textarea id="bericht" name="bericht" placeholder="Datum, locatie, aantal bezoekers, wat je nodig hebt"></textarea>
+  </div>
+
+  <button class="button is-primary" type="submit">Verstuur aanvraag</button>
+  <p class="form-status" role="status" id="form-status"></p>
+  <p class="form-note">Mockup: dit formulier verstuurt nog niets. In Webflow koppelen we hem aan e-mail en CRM.</p>
+</form>
+
+<script>
+  const form = document.getElementById('offerte-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const status = document.getElementById('form-status');
+    if (status) status.textContent = 'Mockup: dit formulier verstuurt nog niets.';
+  });
+</script>

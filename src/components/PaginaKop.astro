@@ -1,0 +1,22 @@
+---
+interface Props { eyebrow?: string; titel: string; intro?: string; }
+const { eyebrow, titel, intro } = Astro.props;
+---
+<section class="paginakop">
+  <div class="wrap">
+    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <h1>{titel}</h1>
+    {intro && <p class="paginakop-intro">{intro}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .paginakop{
+    background:linear-gradient(155deg,var(--blue),var(--navy) 72%);
+    padding-block:var(--s-9) var(--s-8);
+    border-bottom:1px solid var(--line);
+  }
+  .paginakop h1{font-size:clamp(2rem,1.4rem + 3vw,3.4rem);}
+  .paginakop-intro{margin-top:var(--s-4);max-width:56ch;color:#e2ecf8;font-size:1.05rem;}
+</style>

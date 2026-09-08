@@ -1,0 +1,47 @@
+[
+  {
+    "id": "crew-mobility",
+    "naam": "Crew mobility",
+    "slug": "crew-mobility",
+    "nummer": "01",
+    "label": "Backstage",
+    "kort": "E-Choppers, E-Fatbikes en E-Steps zodat je crew nooit hoeft te wachten op vervoer over het terrein.",
+    "lang": [
+      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde.",
+      "Op een groot terrein kost lopen je crew de hele dag. Met eigen vervoer backstage is iedereen binnen een paar minuten waar hij moet zijn."
+    ],
+    "hoofdfoto": "inzet-crew.jpg",
+    "voertuigen": ["e-choppers", "e-fatbikes-e-steps"],
+    "volgorde": 1
+  },
+  {
+    "id": "people-mobility",
+    "naam": "People mobility",
+    "slug": "people-mobility",
+    "nummer": "02",
+    "label": "Op het evenement",
+    "kort": "TukTuks en Topolino's brengen artiesten en gasten comfortabel en met allure van A naar B.",
+    "lang": [
+      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde.",
+      "Van de parkeerplaats naar de ingang, van backstage naar het podium, van de camping naar het terrein. Met chauffeur of zonder."
+    ],
+    "hoofdfoto": "inzet-people.jpg",
+    "voertuigen": ["tuktuks", "topolinos"],
+    "volgorde": 2
+  },
+  {
+    "id": "branded-mobility",
+    "naam": "Branded mobility",
+    "slug": "branded-mobility",
+    "nummer": "03",
+    "label": "Merkactivatie",
+    "kort": "Onze voertuigen volledig in jouw huisstijl gewrapt, zoals we deden voor Rivella en het Mauritshuis.",
+    "lang": [
+      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde.",
+      "Een gewrapt voertuig staat niet stil op een plek waar mensen langslopen. Het rijdt de hele dag over het terrein en komt overal voorbij."
+    ],
+    "hoofdfoto": "inzet-branded.jpg",
+    "voertuigen": ["tuktuks", "topolinos"],
+    "volgorde": 3
+  }
+]

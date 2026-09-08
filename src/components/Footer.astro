@@ -1,0 +1,74 @@
+---
+import Logo from './Logo.astro';
+import { link } from '../lib/pad';
+import { getCollection } from 'astro:content';
+
+const pad = Astro.url.pathname;
+const l = (doel: string) => link(pad, doel);
+
+const voertuigen = (await getCollection('voertuigen')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+const usecases = (await getCollection('usecases')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <Logo />
+        <p>Backstage mobility for events. Onderdeel van Unieke Uitjes.</p>
+      </div>
+
+      <div class="footer-col">
+        <span class="footer-kop">Voertuigen</span>
+        {voertuigen.map((v) => <a href={l(`/voertuigen/${v.data.slug}`)}>{v.data.naam}</a>)}
+      </div>
+
+      <div class="footer-col">
+        <span class="footer-kop">Inzet</span>
+        {usecases.map((u) => <a href={l(`/inzet/${u.data.slug}`)}>{u.data.naam}</a>)}
+      </div>
+
+      <div class="footer-col">
+        <span class="footer-kop">Eventwheelz</span>
+        <a href={l('/cases')}>Cases</a>
+        <a href={l('/over')}>Over ons</a>
+        <a href={l('/contact')}>Offerte aanvragen</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; {new Date().getFullYear()} Eventwheelz, onderdeel van Unieke Uitjes</span>
+      <span class="footer-mockup">Mockup, nog niet de definitieve teksten en foto's</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer{background:var(--deep);padding-block:var(--s-8) var(--s-5);border-top:1px solid var(--line);}
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.4fr repeat(3,1fr);
+    gap:var(--s-6);
+    padding-bottom:var(--s-6);
+    border-bottom:1px solid var(--line);
+  }
+  .footer-brand p{margin-top:var(--s-3);color:var(--muted);font-size:.9rem;max-width:34ch;}
+  .footer-col{display:flex;flex-direction:column;}
+  .footer-kop{
+    font-weight:700;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:var(--s-2);
+  }
+  .footer-col a{
+    display:inline-flex;align-items:center;min-height:44px;
+    color:var(--muted);text-decoration:none;font-size:.92rem;
+  }
+  .footer-col a:hover{color:var(--white);}
+  .footer-bottom{
+    margin-top:var(--s-5);
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s-3);
+    font-size:.78rem;color:var(--muted);
+  }
+  .footer-mockup{color:var(--accent);}
+
+  @media (max-width:991px){ .footer-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:767px){ .footer-grid{grid-template-columns:1fr;gap:var(--s-5);} }
+</style>

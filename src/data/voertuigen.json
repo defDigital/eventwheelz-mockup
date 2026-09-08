@@ -1,0 +1,112 @@
+[
+  {
+    "id": "e-choppers",
+    "naam": "E-Choppers",
+    "slug": "e-choppers",
+    "kort": "Snel en wendbaar over grote terreinen. De favoriet voor crewvervoer backstage.",
+    "lang": [
+      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."
+    ],
+    "vanafprijs": 45,
+    "prijsEenheid": "per dag",
+    "inbegrepen": [
+      "WA-verzekering",
+      "21% btw",
+      "Bezorgen en ophalen",
+      "Helmen en haarnetjes"
+    ],
+    "hoofdfoto": "voertuig-e-choppers.jpg",
+    "galerij": [],
+    "aantalPersonen": null,
+    "actieradius": null,
+    "rijbewijs": null,
+    "accuwissel": true,
+    "inzet": [
+      "crew-mobility"
+    ],
+    "volgorde": 1
+  },
+  {
+    "id": "e-fatbikes-e-steps",
+    "naam": "E-Fatbikes & E-Steps",
+    "slug": "e-fatbikes-e-steps",
+    "kort": "Compact, stil en zonder rijbewijs te gebruiken. Ideaal voor korte ritten op het terrein.",
+    "lang": [
+      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."
+    ],
+    "vanafprijs": 35,
+    "prijsEenheid": "per dag",
+    "inbegrepen": [
+      "WA-verzekering",
+      "21% btw",
+      "Bezorgen en ophalen",
+      "Helmen en haarnetjes"
+    ],
+    "hoofdfoto": "voertuig-fatbikes.jpg",
+    "galerij": [],
+    "aantalPersonen": null,
+    "actieradius": null,
+    "rijbewijs": null,
+    "accuwissel": true,
+    "inzet": [
+      "crew-mobility"
+    ],
+    "volgorde": 2
+  },
+  {
+    "id": "tuktuks",
+    "naam": "TukTuks",
+    "slug": "tuktuks",
+    "kort": "Comfortabel groepsvervoer met karakter. Perfect als pendeldienst of voor gastenvervoer.",
+    "lang": [
+      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."
+    ],
+    "vanafprijs": 330,
+    "prijsEenheid": "per dag",
+    "inbegrepen": [
+      "WA-verzekering",
+      "21% btw",
+      "Bezorgen en ophalen"
+    ],
+    "hoofdfoto": "voertuig-tuktuks.jpg",
+    "galerij": [
+      "breed-tuktuks-klaar.jpg"
+    ],
+    "aantalPersonen": null,
+    "actieradius": null,
+    "rijbewijs": null,
+    "accuwissel": false,
+    "inzet": [
+      "people-mobility",
+      "branded-mobility"
+    ],
+    "volgorde": 3
+  },
+  {
+    "id": "topolinos",
+    "naam": "Topolino's",
+    "slug": "topolinos",
+    "kort": "Compact en stijlvol vervoer met VIP-uitstraling. Ons meest gevraagde canvas voor een wrap.",
+    "lang": [
+      "PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."
+    ],
+    "vanafprijs": 125,
+    "prijsEenheid": "per dag",
+    "inbegrepen": [
+      "WA-verzekering",
+      "21% btw",
+      "Bezorgen en ophalen"
+    ],
+    "hoofdfoto": "voertuig-topolinos.jpg",
+    "galerij": [],
+    "aantalPersonen": null,
+    "actieradius": null,
+    "rijbewijs": null,
+    "accuwissel": false,
+    "inzet": [
+      "people-mobility",
+      "branded-mobility"
+    ],
+    "volgorde": 4
+  }
+]

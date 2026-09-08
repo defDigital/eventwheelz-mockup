@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import { logo } from '../lib/beeld';
+
+/**
+ * Webflow heeft hier geen native component voor. Bij het overzetten wordt dit
+ * óf een klein stukje custom code, óf een stilstaand logoraster. De opmaak is
+ * zo gekozen dat allebei werkt: zonder de animatie blijft het een nette rij.
+ */
+const klanten = [
+  { naam: 'Zwarte Cross', bestand: 'zwarte-cross.png' },
+  { naam: 'AFAS', bestand: 'afas.png' },
+  { naam: 'Gemeente Amsterdam', bestand: 'gemeente-amsterdam.png' },
+  { naam: 'Centraal Beheer', bestand: 'centraal-beheer.png' },
+  { naam: 'Mauritshuis', bestand: 'mauritshuis.png' },
+  { naam: 'Rivella', bestand: 'rivella.png' },
+];
+---
+<div class="logobar">
+  <div class="wrap">
+    <p class="logobar-label">Onder andere ingehuurd door</p>
+  </div>
+  <div class="logobar-viewport">
+    <div class="logobar-track">
+      {[0, 1].map((kopie) => (
+        <div class="logobar-set" aria-hidden={kopie === 1 ? 'true' : undefined}>
+          {klanten.map((k) => (
+            <span class="logobar-item">
+              <Image src={logo(k.bestand)!} alt={kopie === 1 ? '' : k.naam} height={44} loading="lazy" />
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .logobar{background:var(--band-bg);padding-block:var(--s-5);border-block:1px solid var(--line);}
+  .logobar-label{
+    text-align:center;
+    font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:var(--s-4);
+  }
+  .logobar-viewport{overflow:hidden;}
+  .logobar-track{display:flex;width:max-content;animation:logobar 34s linear infinite;}
+  .logobar-set{display:flex;align-items:center;gap:var(--s-4);padding-right:var(--s-4);}
+  .logobar-item{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--white);
+    border-radius:var(--radius);
+    padding:var(--s-3) var(--s-5);
+    min-width:150px;min-height:76px;
+  }
+  .logobar-item :global(img){height:44px;width:auto;object-fit:contain;}
+
+  @keyframes logobar{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  @media (prefers-reduced-motion:reduce){
+    .logobar-track{animation:none;flex-wrap:wrap;width:100%;justify-content:center;}
+    .logobar-set{flex-wrap:wrap;justify-content:center;gap:var(--s-6);padding-right:0;}
+    .logobar-set[aria-hidden="true"]{display:none;}
+  }
+</style>

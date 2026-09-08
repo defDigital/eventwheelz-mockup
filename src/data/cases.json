@@ -1,0 +1,41 @@
+[
+  {
+    "id": "zwarte-cross",
+    "klant": "Zwarte Cross",
+    "slug": "zwarte-cross",
+    "kort": "TukTuk-shuttle tussen camping en terrein, en E-Choppers voor de crew backstage.",
+    "verhaal": ["PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."],
+    "logo": "zwarte-cross.png",
+    "foto": "breed-tuktuks-onderweg.jpg",
+    "jaar": null,
+    "inzet": ["crew-mobility", "people-mobility"],
+    "voertuigen": ["tuktuks", "e-choppers"],
+    "volgorde": 1
+  },
+  {
+    "id": "rivella",
+    "klant": "Rivella",
+    "slug": "rivella",
+    "kort": "Een voertuig volledig gewrapt in de huisstijl van Rivella, als rijdende merkactivatie.",
+    "verhaal": ["PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."],
+    "logo": "rivella.png",
+    "foto": "breed-elektrische-autos.jpg",
+    "jaar": null,
+    "inzet": ["branded-mobility"],
+    "voertuigen": ["tuktuks"],
+    "volgorde": 2
+  },
+  {
+    "id": "mauritshuis",
+    "klant": "Mauritshuis",
+    "slug": "mauritshuis",
+    "kort": "Branded mobility voor het Mauritshuis.",
+    "verhaal": ["PLACEHOLDER. Definitieve tekst volgt in de copywriting-ronde."],
+    "logo": "mauritshuis.png",
+    "foto": "breed-tuktuks-klaar.jpg",
+    "jaar": null,
+    "inzet": ["branded-mobility"],
+    "voertuigen": ["tuktuks"],
+    "volgorde": 3
+  }
+]

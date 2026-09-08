@@ -1,0 +1,48 @@
+---
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/basis.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props { titel: string; omschrijving: string; }
+const { titel, omschrijving } = Astro.props;
+
+const PRODUCTIE = 'https://eventwheelz.nl';
+const basisUrl = Astro.site ?? new URL(PRODUCTIE);
+
+// Met build.format:'file' geeft Astro.url.pathname het bestandspad
+// (/voertuigen.html), terwijl de sitemap de extensieloze variant gebruikt.
+// Zonder deze correctie spreken canonical en sitemap elkaar tegen.
+const schoonPad = Astro.url.pathname
+  .replace(/index\.html$/, '')
+  .replace(/\.html$/, '');
+const canonical = new URL(schoonPad, basisUrl).href;
+
+// Alles wat niet op het echte domein staat is een preview en mag nooit
+// meedingen met de site van de klant in Google.
+const isPreview = basisUrl.hostname !== new URL(PRODUCTIE).hostname;
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{titel}</title>
+  <meta name="description" content={omschrijving} />
+  <link rel="canonical" href={canonical} />
+  {isPreview && <meta name="robots" content="noindex, nofollow" />}
+  <meta property="og:title" content={titel} />
+  <meta property="og:description" content={omschrijving} />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0a3a6e" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <Header />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+</body>
+</html>

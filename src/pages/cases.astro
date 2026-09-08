@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Basis from '../layouts/Basis.astro';
+import PaginaKop from '../components/PaginaKop.astro';
+import Logobalk from '../components/Logobalk.astro';
+import CtaBlok from '../components/CtaBlok.astro';
+import { foto } from '../lib/beeld';
+import { link } from '../lib/pad';
+
+const pad = Astro.url.pathname;
+const cases = (await getCollection('cases')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+---
+<Basis titel="Cases — Eventwheelz" omschrijving="Zwarte Cross, Rivella en het Mauritshuis. Waar Eventwheelz al reed.">
+  <PaginaKop
+    eyebrow="Al in beweging bij"
+    titel="Bewezen op de grond."
+    intro="Van een shuttle tussen camping en terrein tot een volledig gewrapt voertuig als merkactivatie." />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="grid is-3">
+        {cases.map((c) => {
+          const beeld = foto(c.data.foto);
+          return (
+            <a class="card" href={link(pad, `/cases/${c.data.slug}`)}>
+              {beeld && (
+                <div class="card-image">
+                  <Image src={beeld} alt={`Eventwheelz bij ${c.data.klant}`} widths={[400, 800]} sizes="(max-width:767px) 100vw, 380px" loading="lazy" />
+                </div>
+              )}
+              <div class="card-body">
+                <h2 class="case-titel">{c.data.klant}</h2>
+                <p>{c.data.kort}</p>
+                <span class="case-rol">Bekijk de case</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <Logobalk />
+  <CtaBlok huidigPad={pad} />
+</Basis>
+
+<style>
+  .case-titel{font-size:1.4rem;text-transform:none;}
+  .card-body .case-rol{margin-top:auto;padding-top:var(--s-3);}
+</style>

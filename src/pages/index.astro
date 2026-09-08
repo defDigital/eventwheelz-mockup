@@ -1,0 +1,179 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Basis from '../layouts/Basis.astro';
+import Hero from '../components/Hero.astro';
+import Logobalk from '../components/Logobalk.astro';
+import VoertuigKaart from '../components/VoertuigKaart.astro';
+import OfferteFormulier from '../components/OfferteFormulier.astro';
+import { foto } from '../lib/beeld';
+import { link } from '../lib/pad';
+
+const pad = Astro.url.pathname;
+const l = (doel: string) => link(pad, doel);
+
+const voertuigen = (await getCollection('voertuigen')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+const usecases = (await getCollection('usecases')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+const cases = (await getCollection('cases')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+
+// Wat er in de prijs zit. Aangeleverd door Roel, 7 september.
+const inbegrepen = ['WA-verzekering', '21% btw', 'Bezorgen en ophalen', 'Helmen en haarnetjes (indien van toepassing)'];
+---
+<Basis
+  titel="Eventwheelz — backstage mobility for events"
+  omschrijving="Eventwheelz verhuurt E-Choppers, E-Fatbikes, E-Steps, TukTuks en Topolino's voor evenementen. Onderdeel van Unieke Uitjes.">
+
+  <Hero />
+  <Logobalk />
+
+  <!-- INZET -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Drie implementaties, een vloot</span>
+        <h2>Waar zet je Eventwheelz voor in?</h2>
+      </div>
+      <div class="grid is-3">
+        {usecases.map((u) => {
+          const beeld = foto(u.data.hoofdfoto);
+          return (
+            <a class="panel" href={l(`/inzet/${u.data.slug}`)}>
+              {beeld && <Image src={beeld} alt={u.data.kort} widths={[400, 800]} sizes="(max-width:767px) 100vw, 380px" loading="lazy" />}
+              <div class="panel-body">
+                <span class="panel-num">{u.data.nummer} / {u.data.label}</span>
+                <h3>{u.data.naam}</h3>
+                <p>{u.data.kort}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- VOERTUIGEN -->
+  <section class="section is-band" id="wheels">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Onze wheels</span>
+        <h2>Elk voertuig, een eigen taak.</h2>
+        <p>Alle voertuigen worden geleverd, geplaatst en weer opgehaald.</p>
+      </div>
+      <div class="grid is-4">
+        {voertuigen.map((v) => <VoertuigKaart voertuig={v} huidigPad={pad} />)}
+      </div>
+      <p class="inbegrepen">
+        <strong>Bij elke prijs inbegrepen:</strong>{' '}
+        {inbegrepen.join(' \u00b7 ')}
+      </p>
+    </div>
+  </section>
+
+  <!-- NOOIT STILSTAND -->
+  <section class="section is-alt">
+    <div class="wrap usp-grid">
+      <div>
+        <span class="eyebrow">Waarom organisatoren voor ons kiezen</span>
+        <h2>Nooit stilstand.</h2>
+        <div class="usp-list">
+          <div class="usp-item">
+            <span class="usp-num">01</span>
+            <div>
+              <h3 class="usp-kop">Accu wisselen, niet omruilen</h3>
+              <p>Geen stilstaande voertuigen en geen administratief gedoe. We wisselen de accu en je rijdt weer door.</p>
+              <span class="usp-note">* alleen van toepassing op E-Choppers, E-Fatbikes en E-Steps.</span>
+            </div>
+          </div>
+          <div class="usp-item">
+            <span class="usp-num">02</span>
+            <div>
+              <h3 class="usp-kop">Standaard een reserve-accu erbij</h3>
+              <p>Bij elke 5 E-Choppers, E-Fatbikes of E-Steps die je huurt leveren we 1 extra accu gratis mee.</p>
+            </div>
+          </div>
+          <div class="usp-item">
+            <span class="usp-num">03</span>
+            <div>
+              <h3 class="usp-kop">Eigen laadstation vanaf 25 stuks</h3>
+              <p>Vanaf 25 e-choppers leveren we een accukast waarmee je zelf oplaadt en doorroteert.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="stat-num">0 min.</span><span class="stat-label">wachttijd bij accu-wissel</span></div>
+        <div class="stat"><span class="stat-num">1 op 5</span><span class="stat-label">gratis extra accu</span></div>
+        <div class="stat"><span class="stat-num">25+</span><span class="stat-label">voertuigen voor een accukast</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASES -->
+  <section class="section is-band">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Al in beweging bij</span>
+        <h2>Bewezen op de grond.</h2>
+      </div>
+      <div class="grid is-3">
+        {cases.map((c) => (
+          <a class="case-card" href={l(`/cases/${c.data.slug}`)}>
+            <h3>{c.data.klant}</h3>
+            <p>{c.data.kort}</p>
+            <span class="case-rol">Bekijk de case</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section cta-section" id="contact">
+    <div class="wrap cta-grid">
+      <div>
+        <span class="eyebrow">Offerte aanvragen</span>
+        <h2>Klaar om je event in beweging te zetten?</h2>
+        <p class="cta-tekst">Vertel om wat voor evenement het gaat en wat je nodig hebt. We denken mee over de juiste mix en sturen een voorstel op maat.</p>
+        <p class="cta-contact">
+          <a href="mailto:info@eventwheelz.nl">info@eventwheelz.nl</a><br />
+          Onderdeel van Unieke Uitjes
+        </p>
+      </div>
+      <OfferteFormulier />
+    </div>
+  </section>
+</Basis>
+
+<style>
+  /* De USP-koppen zijn h3 voor de kopvolgorde, maar houden hun uiterlijk. */
+  .usp-kop{
+    font-family:var(--f-body);
+    font-weight:700;
+    font-size:1.02rem;
+    line-height:1.4;
+    text-transform:none;
+    letter-spacing:normal;
+    color:var(--white);
+  }
+  .inbegrepen{
+    margin-top:var(--s-6);
+    padding-top:var(--s-4);
+    border-top:1px solid var(--line);
+    color:var(--muted);
+    font-size:.92rem;
+  }
+  .inbegrepen strong{color:var(--white);}
+
+  .usp-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:var(--s-8);align-items:start;}
+  .cta-section{background:linear-gradient(155deg,var(--blue),var(--navy) 78%);}
+  .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-8);align-items:start;}
+  .cta-tekst{margin-top:var(--s-4);color:#e2ecf8;max-width:42ch;}
+  .cta-contact{margin-top:var(--s-5);font-weight:700;color:var(--white);}
+  .cta-contact a{color:var(--white);}
+
+  @media (max-width:991px){
+    .usp-grid,.cta-grid{grid-template-columns:1fr;gap:var(--s-6);}
+    .stats{flex-direction:row;flex-wrap:wrap;gap:var(--s-5);}
+  }
+  @media (max-width:479px){ .stats{flex-direction:column;} }
+</style>

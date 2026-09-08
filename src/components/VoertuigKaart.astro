@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import { foto } from '../lib/beeld';
+import { link } from '../lib/pad';
+
+interface Props { voertuig: any; huidigPad: string; kopniveau?: 'h2' | 'h3'; }
+const { voertuig, huidigPad, kopniveau = 'h3' } = Astro.props;
+const Kop = kopniveau;
+const d = voertuig.data;
+const beeld = foto(d.hoofdfoto);
+---
+<a class="card" href={link(huidigPad, `/voertuigen/${d.slug}`)}>
+  {beeld && (
+    <div class="card-image">
+      <Image src={beeld} alt={`${d.naam} van Eventwheelz`} widths={[320, 640]} sizes="(max-width:767px) 100vw, 300px" loading="lazy" />
+    </div>
+  )}
+  <div class="card-body">
+    <Kop class="card-titel">{d.naam}</Kop>
+    <p>{d.kort}</p>
+    {d.vanafprijs !== null && (
+      <span class="price">v.a. &euro; {d.vanafprijs},- {d.prijsEenheid}</span>
+    )}
+  </div>
+</a>
+
+<style>
+  .card-titel{font-size:var(--h3);}
+</style>
