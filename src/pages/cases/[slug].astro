@@ -3,7 +3,6 @@ import { getCollection, getEntries } from 'astro:content';
 import { Image } from 'astro:assets';
 import Basis from '../../layouts/Basis.astro';
 import PaginaKop from '../../components/PaginaKop.astro';
-import Kruimel from '../../components/Kruimel.astro';
 import VoertuigKaart from '../../components/VoertuigKaart.astro';
 import CtaBlok from '../../components/CtaBlok.astro';
 import DrieLuik from '../../components/DrieLuik.astro';
@@ -11,7 +10,7 @@ import Cijfers from '../../components/Cijfers.astro';
 import Quote from '../../components/Quote.astro';
 import Fotostrook from '../../components/Fotostrook.astro';
 import { foto, logo } from '../../lib/beeld';
-import { link } from '../../lib/pad';
+import { link, raster } from '../../lib/pad';
 
 export async function getStaticPaths() {
   const cases = await getCollection('cases');
@@ -33,7 +32,14 @@ const drieluik = [
 ];
 ---
 <Basis titel={`${d.klant} — case van Eventwheelz`} omschrijving={`${d.kort} Case van Eventwheelz, onderdeel van Unieke Uitjes.`}>
-  <PaginaKop eyebrow="Case" titel={d.klant} intro={d.kort}>
+  <PaginaKop
+    eyebrow="Case"
+    titel={d.klant}
+    intro={d.kort}
+    variant="beeld"
+    beeld={beeld}
+    beeldAlt={`Eventwheelz bij ${d.klant}`}
+    terug={{ naar: '/cases', label: 'Alle cases' }}>
     {merk && (
       <span class="merk"><Image src={merk} alt={d.klant} height={40} loading="eager" /></span>
     )}
@@ -41,12 +47,6 @@ const drieluik = [
 
   <section class="section">
     <div class="wrap">
-      <Kruimel naar="/cases" label="Alle cases" />
-
-      {beeld && (
-        <Image class="hoofdbeeld" src={beeld} alt={`Eventwheelz bij ${d.klant}`} widths={[800, 1400]} sizes="100vw" loading="eager" />
-      )}
-
       <div class="case-body">
         <div class="tekst">
           {d.verhaal.map((alinea: string) => <p data-dummy>{alinea}</p>)}
@@ -94,7 +94,7 @@ const drieluik = [
           <span class="eyebrow">Ingezet bij deze case</span>
           <h2>De voertuigen die er stonden</h2>
         </div>
-        <div class="grid is-4">
+        <div class:list={['grid', raster(voertuigen.length)]}>
           {voertuigen.map((v) => <VoertuigKaart voertuig={v} huidigPad={pad} />)}
         </div>
       </div>
@@ -112,9 +112,8 @@ const drieluik = [
     padding:var(--s-3) var(--s-4);
   }
   .merk :global(img){height:40px;width:auto;object-fit:contain;}
-  .hoofdbeeld{width:100%;height:auto;border-radius:var(--radius);margin-top:var(--s-4);}
   .drieluik-wrap{margin-top:var(--s-8);}
-  .case-body{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-8);margin-top:var(--s-6);align-items:start;}
+  .case-body{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-8);align-items:start;}
   .tekst{display:flex;flex-direction:column;gap:var(--s-4);}
   .tekst p{color:var(--body);}
   .feiten{background:var(--band-bg);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s-5);display:flex;flex-direction:column;gap:var(--s-4);}

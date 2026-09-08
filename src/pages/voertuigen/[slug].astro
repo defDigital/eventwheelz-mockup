@@ -3,13 +3,12 @@ import { getCollection, getEntries } from 'astro:content';
 import { Image } from 'astro:assets';
 import Basis from '../../layouts/Basis.astro';
 import PaginaKop from '../../components/PaginaKop.astro';
-import Kruimel from '../../components/Kruimel.astro';
 import CtaBlok from '../../components/CtaBlok.astro';
 import Stappen from '../../components/Stappen.astro';
 import Faq from '../../components/Faq.astro';
 import VoertuigKaart from '../../components/VoertuigKaart.astro';
 import { foto } from '../../lib/beeld';
-import { link } from '../../lib/pad';
+import { link, raster } from '../../lib/pad';
 
 export async function getStaticPaths() {
   const voertuigen = await getCollection('voertuigen');
@@ -40,10 +39,17 @@ const stappen = [
 // Andere voertuigen, voor onderaan de pagina.
 const alle = (await getCollection('voertuigen')).sort((a, b) => a.data.volgorde - b.data.volgorde);
 const anderen = alle.filter((v) => v.id !== voertuig.id).slice(0, 3);
-const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
+const galerij = d.galerij.map((b: string) => foto(b)).filter(Boolean);
 ---
 <Basis titel={`${d.naam} huren — Eventwheelz`} omschrijving={d.kort}>
-  <PaginaKop eyebrow="Onze wheels" titel={d.naam} intro={d.kort}>
+  <PaginaKop
+    eyebrow="Onze wheels"
+    titel={d.naam}
+    intro={d.kort}
+    variant="split"
+    beeld={foto(d.hoofdfoto)}
+    beeldAlt={`${d.naam} van Eventwheelz`}
+    terug={{ naar: '/voertuigen', label: 'Alle wheels' }}>
     <p class="kop-payoff">{d.payoff}</p>
     {d.vanafprijs !== null && (
       <p class="kop-prijs">v.a. &euro; {d.vanafprijs},- {d.prijsEenheid}</p>
@@ -51,43 +57,21 @@ const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
   </PaginaKop>
 
   <section class="section">
-    <div class="wrap detail">
-      <div class="detail-hoofd">
-        <Kruimel naar="/voertuigen" label="Alle wheels" />
-
-        {beelden.length > 0 && (
-          <div class="galerij">
-            {beelden.map((b, i) => {
-              const beeld = foto(b);
-              return beeld ? (
-                <Image src={beeld} alt={`${d.naam} van Eventwheelz`} widths={[600, 1000]}
-                       sizes="(max-width:767px) 100vw, 700px" loading={i === 0 ? 'eager' : 'lazy'} />
-              ) : null;
-            })}
-          </div>
-        )}
-
-        <div class="detail-tekst">
-          {d.lang.map((alinea: string) => <p data-dummy>{alinea}</p>)}
-        </div>
-
+    <div class="wrap">
+      <div class="detail-tekst">
+        {d.lang.map((alinea: string) => <p data-dummy>{alinea}</p>)}
       </div>
 
-      <aside class="detail-zij">
-        {specs.length > 0 && (
-          <div class="paneel">
-            <h2 class="paneel-kop">Specificaties</h2>
-            <dl class="specs">
-              {specs.map((s) => (
-                <div class="spec-rij">
-                  <dt>{s.label}</dt>
-                  <dd>{s.waarde}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        )}
+      {galerij.length > 0 && (
+        <div class="galerij">
+          {galerij.map((b) => (
+            <Image src={b!} alt={`${d.naam} van Eventwheelz`} widths={[600, 1000]}
+                   sizes="(max-width:767px) 100vw, 560px" loading="lazy" />
+          ))}
+        </div>
+      )}
 
+      <div class="panelen">
         <div class="paneel">
           <h2 class="paneel-kop">Bij de prijs inbegrepen</h2>
           <ul class="inbegrepen-lijst">
@@ -109,8 +93,22 @@ const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
           </div>
         )}
 
-        <a class="button is-primary paneel-cta" href={link(pad, '/contact')}>Offerte aanvragen</a>
-      </aside>
+        {specs.length > 0 && (
+          <div class="paneel">
+            <h2 class="paneel-kop">Specificaties</h2>
+            <dl class="specs">
+              {specs.map((s) => (
+                <div class="spec-rij">
+                  <dt>{s.label}</dt>
+                  <dd>{s.waarde}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+      </div>
+
+      <a class="button is-primary" href={link(pad, '/contact')}>Offerte aanvragen</a>
     </div>
   </section>
 
@@ -125,7 +123,7 @@ const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
           <span class="eyebrow">Vaak samen gehuurd</span>
           <h2>Ook interessant</h2>
         </div>
-        <div class="grid is-3">
+        <div class:list={['grid', raster(anderen.length, 3)]}>
           {anderen.map((v) => <VoertuigKaart voertuig={v} huidigPad={pad} />)}
         </div>
       </div>
@@ -153,24 +151,19 @@ const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
     background:rgba(8,30,58,.45);
     font-weight:700;color:var(--accent);
   }
-  .detail{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-8);align-items:start;}
-  .galerij{display:grid;gap:var(--s-4);margin-top:var(--s-4);}
-  .galerij :global(img){width:100%;height:auto;border-radius:var(--radius);}
-  .detail-tekst{margin-top:var(--s-6);display:flex;flex-direction:column;gap:var(--s-4);}
+  .detail-tekst{display:flex;flex-direction:column;gap:var(--s-4);max-width:64ch;}
   .detail-tekst p{color:var(--body);}
 
-  .koppeling{margin-top:var(--s-7);}
-  .koppeling h2{font-size:1.3rem;margin-bottom:var(--s-4);}
-  .koppeling-lijst{display:flex;flex-wrap:wrap;gap:var(--s-3);}
-  .chip{
-    display:inline-flex;align-items:center;min-height:44px;
-    padding:0 var(--s-4);
-    border:1px solid var(--line);border-radius:var(--radius-pill);
-    color:var(--white);text-decoration:none;font-weight:700;font-size:.85rem;
-  }
-  .chip:hover{border-color:var(--accent);color:var(--accent);}
+  .galerij{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s-4);margin-top:var(--s-6);}
+  .galerij :global(img){width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);}
 
-  .detail-zij{display:flex;flex-direction:column;gap:var(--s-4);position:sticky;top:110px;}
+  .panelen{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:var(--s-4);
+    margin-top:var(--s-7);
+    align-items:start;
+  }
   .paneel{background:var(--band-bg);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s-5);}
   .paneel-kop{font-size:1.05rem;margin-bottom:var(--s-4);}
   .specs{margin:0;}
@@ -182,10 +175,15 @@ const beelden = [d.hoofdfoto, ...d.galerij].filter(Boolean) as string[];
   .inbegrepen-lijst li{color:var(--body);font-size:.92rem;padding-left:var(--s-4);position:relative;}
   .inbegrepen-lijst li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--accent);}
   .paneel-note{margin-top:var(--s-4);padding-top:var(--s-4);border-top:1px solid var(--line);color:var(--muted);font-size:.86rem;}
-  .paneel-cta{width:100%;}
-
-  @media (max-width:991px){
-    .detail{grid-template-columns:1fr;gap:var(--s-6);}
-    .detail-zij{position:static;}
+  .koppeling-lijst{display:flex;flex-wrap:wrap;gap:var(--s-3);}
+  .chip{
+    display:inline-flex;align-items:center;min-height:44px;
+    padding:0 var(--s-4);
+    border:1px solid var(--line);border-radius:var(--radius-pill);
+    color:var(--white);text-decoration:none;font-weight:700;font-size:.85rem;
   }
+  .chip:hover{border-color:var(--accent);color:var(--accent);}
+  .button{margin-top:var(--s-6);}
+
+  @media (max-width:767px){ .galerij{grid-template-columns:1fr;} }
 </style>

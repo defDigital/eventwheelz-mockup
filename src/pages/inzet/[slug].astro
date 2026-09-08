@@ -1,15 +1,13 @@
 ---
 import { getCollection, getEntries } from 'astro:content';
-import { Image } from 'astro:assets';
 import Basis from '../../layouts/Basis.astro';
 import PaginaKop from '../../components/PaginaKop.astro';
-import Kruimel from '../../components/Kruimel.astro';
 import VoertuigKaart from '../../components/VoertuigKaart.astro';
 import CtaBlok from '../../components/CtaBlok.astro';
 import Stappen from '../../components/Stappen.astro';
 import Quote from '../../components/Quote.astro';
 import { foto } from '../../lib/beeld';
-import { link } from '../../lib/pad';
+import { link, raster } from '../../lib/pad';
 
 export async function getStaticPaths() {
   const usecases = await getCollection('usecases');
@@ -31,18 +29,19 @@ const cases = alleCases
 const beeld = foto(d.hoofdfoto);
 ---
 <Basis titel={`${d.naam} — Eventwheelz`} omschrijving={d.kort}>
-  <PaginaKop eyebrow={`${d.nummer} / ${d.label}`} titel={d.naam} intro={d.kort}>
+  <PaginaKop
+    eyebrow={`${d.nummer} / ${d.label}`}
+    titel={d.naam}
+    intro={d.kort}
+    variant="split"
+    beeld={beeld}
+    beeldAlt={d.kort}
+    terug={{ naar: '/inzet', label: 'Alle inzetten' }}>
     <p class="kop-payoff">{d.payoff}</p>
   </PaginaKop>
 
   <section class="section">
     <div class="wrap">
-      <Kruimel naar="/inzet" label="Alle inzetten" />
-
-      {beeld && (
-        <Image class="hoofdbeeld" src={beeld} alt={d.kort} widths={[800, 1400]} sizes="100vw" loading="eager" />
-      )}
-
       <div class="tekst">
         {d.lang.map((alinea: string) => <p data-dummy>{alinea}</p>)}
       </div>
@@ -60,7 +59,7 @@ const beeld = foto(d.hoofdfoto);
           <span class="eyebrow">Wat je hiervoor inzet</span>
           <h2>De voertuigen die hierbij passen</h2>
         </div>
-        <div class="grid is-4">
+        <div class:list={['grid', raster(voertuigen.length)]}>
           {voertuigen.map((v) => <VoertuigKaart voertuig={v} huidigPad={pad} />)}
         </div>
       </div>
@@ -74,7 +73,7 @@ const beeld = foto(d.hoofdfoto);
           <span class="eyebrow">Al in beweging bij</span>
           <h2>Zo pakte dat uit</h2>
         </div>
-        <div class="grid is-3">
+        <div class:list={['grid', raster(cases.length, 3)]}>
           {cases.map((c) => (
             <a class="case-card" href={link(pad, `/cases/${c.data.slug}`)}>
               <h3>{c.data.klant}</h3>
@@ -102,7 +101,6 @@ const beeld = foto(d.hoofdfoto);
     color:var(--accent);
     max-width:26ch;
   }
-  .hoofdbeeld{width:100%;height:auto;border-radius:var(--radius);margin-top:var(--s-4);}
-  .tekst{margin-top:var(--s-6);display:flex;flex-direction:column;gap:var(--s-4);max-width:64ch;}
+  .tekst{display:flex;flex-direction:column;gap:var(--s-4);max-width:64ch;}
   .tekst p{color:var(--body);}
 </style>

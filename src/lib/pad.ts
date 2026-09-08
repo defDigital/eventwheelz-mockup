@@ -18,3 +18,12 @@ export function link(_huidigPad: string, doel: string): string {
   const schoon = doel.replace(/^\/+/, '').replace(/\.html$/, '');
   return '/' + schoon + '.html';
 }
+
+/**
+ * Kiest een rasterklasse die past bij het aantal kaarten, zodat er geen
+ * lege kolommen overblijven als er maar één of twee items zijn.
+ */
+export function raster(aantal: number, maximum: 3 | 4 = 4): string {
+  const n = Math.min(aantal, maximum);
+  return `is-${n}`;
+}

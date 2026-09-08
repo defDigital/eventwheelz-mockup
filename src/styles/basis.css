@@ -148,6 +148,7 @@ h4{
 
 /* --- rasters ----------------------------------------------------------- */
 .grid{display:grid;gap:var(--s-5);}
+.grid.is-1{grid-template-columns:minmax(0,520px);}
 .grid.is-2{grid-template-columns:repeat(2,1fr);}
 .grid.is-3{grid-template-columns:repeat(3,1fr);}
 .grid.is-4{grid-template-columns:repeat(4,1fr);}
@@ -169,7 +170,7 @@ h4{
 }
 @media (max-width:767px){
   .section{padding-block:var(--s-7);}
-  .grid.is-3,.grid.is-2{grid-template-columns:1fr;}
+  .grid.is-3,.grid.is-2,.grid.is-1{grid-template-columns:1fr;}
 }
 @media (max-width:479px){
   .grid.is-4{grid-template-columns:1fr;}
@@ -280,6 +281,14 @@ h4{
   margin-top:auto;
   font-weight:700;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted);
+}
+
+/* Eerste alinea van een intro iets groter, anders oogt een losse tekstkolom mager. */
+.detail-tekst > p:first-child,
+.tekst > p:first-child{
+  font-size:1.12rem;
+  line-height:1.6;
+  color:#e2ecf8;
 }
 
 /* --- markering van vulteksten ------------------------------------------ */
