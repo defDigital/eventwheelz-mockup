@@ -28,24 +28,25 @@ const soort = variant === 'lijst' && beeld ? 'lijst' : variant;
 ---
 <section class:list={['section', achtergrondKlasse(achtergrond)]}>
   <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">{eyebrow}</span>
-      <h2>{titel}</h2>
-    </div>
-
     {soort === 'lijst' ? (
       <div class="stappen-split">
-        <ol class="stappen is-lijst">
-          {stappen.map((s, i) => (
-            <li class="stap">
-              <span class="stap-num">{String(i + 1).padStart(2, '0')}</span>
-              <div>
-                <h3 class="stap-titel">{s.titel}</h3>
-                <p data-dummy>{s.tekst}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <div class="stappen-kolom">
+          <div class="section-head">
+            <span class="eyebrow">{eyebrow}</span>
+            <h2>{titel}</h2>
+          </div>
+          <ol class="stappen is-lijst">
+            {stappen.map((s, i) => (
+              <li class="stap">
+                <span class="stap-num">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <h3 class="stap-titel">{s.titel}</h3>
+                  <p data-dummy>{s.tekst}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
         {beeld && (
           <div class="stappen-beeld">
             <Image src={beeld} alt={beeldAlt} widths={[600, 1000]}
@@ -54,6 +55,11 @@ const soort = variant === 'lijst' && beeld ? 'lijst' : variant;
         )}
       </div>
     ) : (
+      <>
+      <div class="section-head">
+        <span class="eyebrow">{eyebrow}</span>
+        <h2>{titel}</h2>
+      </div>
       <ol class="stappen is-rij">
         {stappen.map((s, i) => (
           <li class="stap">
@@ -63,6 +69,7 @@ const soort = variant === 'lijst' && beeld ? 'lijst' : variant;
           </li>
         ))}
       </ol>
+      </>
     )}
   </div>
 </section>
@@ -87,6 +94,7 @@ const soort = variant === 'lijst' && beeld ? 'lijst' : variant;
 
   /* onder elkaar, met een foto ernaast */
   .stappen-split{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--s-8);align-items:start;}
+  .stappen-kolom .section-head{margin-bottom:var(--s-6);}
   .is-lijst{display:flex;flex-direction:column;}
   .is-lijst .stap{
     display:grid;grid-template-columns:auto 1fr;gap:var(--s-4);
