@@ -63,7 +63,7 @@ const galerij = d.galerij.map((b: string) => foto(b)).filter(Boolean);
       </div>
 
       {galerij.length > 0 && (
-        <div class="galerij">
+        <div class:list={['galerij', galerij.length === 1 && 'is-enkel']}>
           {galerij.map((b) => (
             <Image src={b!} alt={`${d.naam} van Eventwheelz`} widths={[600, 1000]}
                    sizes="(max-width:767px) 100vw, 560px" loading="lazy" />
@@ -154,8 +154,21 @@ const galerij = d.galerij.map((b: string) => foto(b)).filter(Boolean);
   .detail-tekst{display:flex;flex-direction:column;gap:var(--s-4);max-width:64ch;}
   .detail-tekst p{color:var(--body);}
 
-  .galerij{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s-4);margin-top:var(--s-6);}
-  .galerij :global(img){width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);}
+  .galerij{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:var(--s-4);
+    margin-top:var(--s-6);
+  }
+  .galerij :global(img){
+    width:100%;height:100%;
+    aspect-ratio:4/3;object-fit:cover;
+    border-radius:var(--radius);
+  }
+  /* Eén foto krijgt de volle breedte en houdt zijn eigen verhouding, anders
+     snijd je een liggende foto onnodig bij tot 4:3. */
+  .galerij.is-enkel{grid-template-columns:1fr;}
+  .galerij.is-enkel :global(img){height:auto;aspect-ratio:auto;}
 
   .panelen{
     display:grid;
