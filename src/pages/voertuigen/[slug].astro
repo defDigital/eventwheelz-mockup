@@ -165,9 +165,10 @@ const galerij = d.galerij.map((b: string) => foto(b)).filter(Boolean);
     aspect-ratio:4/3;object-fit:cover;
     border-radius:var(--radius);
   }
-  /* Eén foto krijgt de volle breedte en houdt zijn eigen verhouding, anders
-     snijd je een liggende foto onnodig bij tot 4:3. */
-  .galerij.is-enkel{grid-template-columns:1fr;}
+  /* Eén foto is geen galerij. Die krijgt de breedte van de tekstkolom, zodat
+     hij als illustratie in de tekst leest in plaats van als losse plaat.
+     Vanaf twee foto's is een rij wel een bewuste compositie en mag hij breed. */
+  .galerij.is-enkel{grid-template-columns:1fr;max-width:64ch;}
   .galerij.is-enkel :global(img){height:auto;aspect-ratio:auto;}
 
   .panelen{

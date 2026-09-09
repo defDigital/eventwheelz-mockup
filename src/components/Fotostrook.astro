@@ -20,7 +20,8 @@ const beelden = bestanden.map((b) => foto(b)).filter(Boolean);
 <style>
   .fotostrook{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-4);}
   .fotostrook.is-2{grid-template-columns:repeat(2,1fr);}
-  .fotostrook.is-enkel{grid-template-columns:1fr;}
+  /* Zie de galerij op de voertuigpagina: één foto krijgt tekstbreedte. */
+  .fotostrook.is-enkel{grid-template-columns:1fr;max-width:64ch;}
   .fotostrook.is-enkel :global(img){height:auto;aspect-ratio:auto;}
   .fotostrook :global(img){width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);}
   @media (max-width:767px){ .fotostrook,.fotostrook.is-2,.fotostrook.is-enkel{grid-template-columns:1fr;} }
