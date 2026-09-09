@@ -1,16 +1,37 @@
 ---
+import { getCollection } from 'astro:content';
 import Logo from './Logo.astro';
 import { link } from '../lib/pad';
 
 const pad = Astro.url.pathname;
 const l = (doel: string) => link(pad, doel);
 
+const voertuigen = (await getCollection('voertuigen')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+const usecases = (await getCollection('usecases')).sort((a, b) => a.data.volgorde - b.data.volgorde);
+
+/**
+ * Items met `sub` klappen open. In Webflow wordt dit de Dropdown-component
+ * binnen de Navbar, die hetzelfde doet: hover op desktop, tik op mobiel.
+ */
 const menu = [
-  { naam: 'Onze wheels', doel: '/voertuigen' },
-  { naam: 'Inzet', doel: '/inzet' },
+  {
+    naam: 'Onze wheels', doel: '/voertuigen', id: 'dd-wheels',
+    sub: [
+      { naam: 'Alle wheels', doel: '/voertuigen' },
+      ...voertuigen.map((v) => ({ naam: v.data.naam, doel: `/voertuigen/${v.data.slug}` })),
+    ],
+  },
+  {
+    naam: 'Inzet', doel: '/inzet', id: 'dd-inzet',
+    sub: [
+      { naam: 'Alle inzetten', doel: '/inzet' },
+      ...usecases.map((u) => ({ naam: u.data.naam, doel: `/inzet/${u.data.slug}` })),
+    ],
+  },
   { naam: 'Cases', doel: '/cases' },
   { naam: 'Over ons', doel: '/over' },
 ];
+
 const huidig = pad.replace(/\.html$/, '').replace(/\/index$/, '/');
 ---
 <header class="navbar">
@@ -25,9 +46,32 @@ const huidig = pad.replace(/\.html$/, '').replace(/\/index$/, '/');
     </button>
 
     <nav class="navbar-menu" id="hoofdmenu" aria-label="Hoofdmenu">
-      {menu.map((m) => (
-        <a href={l(m.doel)} aria-current={huidig.startsWith(m.doel) ? 'page' : undefined}>{m.naam}</a>
+      {menu.map((m) => m.sub ? (
+        <div class="dropdown" data-dropdown>
+          <button
+            class="navbar-link dropdown-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls={m.id}
+            aria-current={huidig.startsWith(m.doel) ? 'page' : undefined}>
+            {m.naam}
+            <svg class="dropdown-pijl" viewBox="0 0 10 6" aria-hidden="true">
+              <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+          <div class="dropdown-lijst" id={m.id}>
+            {m.sub.map((s) => (
+              <a href={l(s.doel)} aria-current={huidig === s.doel ? 'page' : undefined}>{s.naam}</a>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <a
+          class="navbar-link"
+          href={l(m.doel)}
+          aria-current={huidig.startsWith(m.doel) ? 'page' : undefined}>{m.naam}</a>
       ))}
+
       <a href={l('/contact')} class="button is-primary navbar-cta">Offerte aanvragen</a>
     </nav>
   </div>
@@ -48,16 +92,54 @@ const huidig = pad.replace(/\.html$/, '').replace(/\/index$/, '/');
   .navbar-brand{text-decoration:none;display:inline-flex;align-items:center;min-height:44px;}
 
   .navbar-menu{display:flex;align-items:center;gap:var(--s-5);}
-  .navbar-menu a{
-    display:inline-flex;align-items:center;min-height:44px;
-    text-decoration:none;
-    font-size:.9rem;font-weight:600;
-    color:var(--body);
+
+  .navbar-link{
+    display:inline-flex;align-items:center;gap:6px;
+    min-height:44px;
+    background:none;border:0;padding:0;
+    font-family:var(--f-body);font-size:.9rem;font-weight:600;
+    color:var(--body);text-decoration:none;white-space:nowrap;
+    cursor:pointer;
+  }
+  .navbar-link:hover{color:var(--white);}
+  .navbar-link[aria-current="page"]{color:var(--accent);}
+  .navbar-cta{color:var(--accent-text) !important;}
+
+  .dropdown{position:relative;display:flex;align-items:center;}
+  .dropdown-pijl{width:10px;height:6px;flex:none;transition:transform .15s ease;}
+  .dropdown-lijst{
+    display:none;
+    position:absolute;top:100%;left:calc(var(--s-4) * -1);
+    min-width:230px;
+    padding:var(--s-2);
+    background:var(--deep);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:0 18px 40px -20px rgba(3,16,32,.8);
+  }
+  .dropdown-lijst a{
+    display:flex;align-items:center;min-height:44px;
+    padding-inline:var(--s-3);
+    border-radius:var(--radius);
+    color:var(--body);text-decoration:none;font-size:.9rem;font-weight:600;
     white-space:nowrap;
   }
-  .navbar-menu a:hover{color:var(--white);}
-  .navbar-menu a[aria-current="page"]{color:var(--accent);}
-  .navbar-cta{color:var(--accent-text) !important;}
+  .dropdown-lijst a:hover{background:rgba(255,255,255,.07);color:var(--white);}
+  .dropdown-lijst a[aria-current="page"]{color:var(--accent);}
+  .dropdown-lijst a:first-child{
+    border-bottom:1px solid var(--line);
+    border-radius:var(--radius) var(--radius) 0 0;
+    margin-bottom:var(--s-1);
+  }
+
+  .dropdown.is-open .dropdown-lijst{display:block;}
+  .dropdown.is-open .dropdown-pijl{transform:rotate(180deg);}
+
+  /* Op desktop ook op hover, net als de Webflow-navbar. */
+  @media (min-width:992px){
+    .dropdown:hover .dropdown-lijst{display:block;}
+    .dropdown:hover .dropdown-pijl{transform:rotate(180deg);}
+  }
 
   .navbar-toggle{
     display:none;
@@ -84,19 +166,73 @@ const huidig = pad.replace(/\.html$/, '').replace(/\/index$/, '/');
       padding:var(--s-3) var(--s-5) var(--s-5);
       background:var(--navy);
       border-bottom:1px solid var(--line);
+      max-height:calc(100vh - 100%);
+      overflow-y:auto;
     }
     .navbar-menu.is-open{display:flex;}
-    .navbar-menu a{min-height:52px;font-size:1rem;}
+    .navbar-link{min-height:52px;font-size:1rem;justify-content:space-between;width:100%;}
+    .dropdown{display:block;}
+    .dropdown-lijst{
+      position:static;min-width:0;
+      background:transparent;border:0;box-shadow:none;
+      padding:0 0 var(--s-3) var(--s-4);
+      border-left:1px solid var(--line);
+      margin-left:var(--s-1);
+    }
     .navbar-cta{margin-top:var(--s-3);justify-content:center;}
   }
 </style>
 
 <script>
-  // Zelfde gedrag als de Webflow-navbar: knop klapt het menu open en dicht.
   const knop = document.querySelector<HTMLButtonElement>('.navbar-toggle');
   const menu = document.getElementById('hoofdmenu');
   knop?.addEventListener('click', () => {
     const open = menu?.classList.toggle('is-open') ?? false;
     knop.setAttribute('aria-expanded', String(open));
+  });
+
+  const dropdowns = [...document.querySelectorAll<HTMLElement>('[data-dropdown]')];
+
+  const sluitAlles = (behalve?: HTMLElement) => {
+    for (const d of dropdowns) {
+      if (d === behalve) continue;
+      d.classList.remove('is-open');
+      d.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'false');
+    }
+  };
+
+  for (const d of dropdowns) {
+    const toggle = d.querySelector<HTMLButtonElement>('.dropdown-toggle');
+    toggle?.addEventListener('click', () => {
+      const open = !d.classList.contains('is-open');
+      sluitAlles(d);
+      d.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  }
+
+  // Met het toetsenbord: de knop opent met Enter of spatie, en zodra je
+  // doortabt naar een item blijft de lijst open. De knop zelf opent hem niet
+  // via focus, anders zou Escape hem meteen weer openen.
+  for (const d of dropdowns) {
+    d.addEventListener('focusin', (e) => {
+      if ((e.target as HTMLElement).closest('.dropdown-lijst')) {
+        sluitAlles(d);
+        d.classList.add('is-open');
+        d.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'true');
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = dropdowns.find((d) => d.classList.contains('is-open'));
+    if (!open) return;
+    open.querySelector<HTMLButtonElement>('.dropdown-toggle')?.focus();
+    sluitAlles();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('[data-dropdown]')) sluitAlles();
   });
 </script>

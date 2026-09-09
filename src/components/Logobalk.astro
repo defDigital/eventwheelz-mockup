@@ -1,4 +1,5 @@
 ---
+import { achtergrondKlasse, type Achtergrond } from '../lib/pad';
 import { Image } from 'astro:assets';
 import { logo } from '../lib/beeld';
 
@@ -7,6 +8,9 @@ import { logo } from '../lib/beeld';
  * óf een klein stukje custom code, óf een stilstaand logoraster. De opmaak is
  * zo gekozen dat allebei werkt: zonder de animatie blijft het een nette rij.
  */
+interface Props { achtergrond?: Achtergrond; }
+const { achtergrond = 'deep' } = Astro.props;
+
 const klanten = [
   { naam: 'Zwarte Cross', bestand: 'zwarte-cross.png' },
   { naam: 'AFAS', bestand: 'afas.png' },
@@ -16,7 +20,7 @@ const klanten = [
   { naam: 'Rivella', bestand: 'rivella.png' },
 ];
 ---
-<div class="logobar">
+<div class:list={['logobar', achtergrondKlasse(achtergrond)]}>
   <div class="wrap">
     <p class="logobar-label">Onder andere ingehuurd door</p>
   </div>
@@ -36,12 +40,14 @@ const klanten = [
 </div>
 
 <style>
-  .logobar{background:var(--band-bg);padding-block:var(--s-5);border-block:1px solid var(--line);}
+  .logobar{background:var(--page-bg);padding-block:var(--s-5);border-block:1px solid var(--line);}
   .logobar-label{
     text-align:center;
     font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
     color:var(--muted);margin-bottom:var(--s-4);
   }
+  .logobar.is-band{background:var(--band-bg);}
+  .logobar.is-alt{background:var(--alt-bg);}
   .logobar-viewport{overflow:hidden;}
   .logobar-track{display:flex;width:max-content;animation:logobar 34s linear infinite;}
   .logobar-set{display:flex;align-items:center;gap:var(--s-4);padding-right:var(--s-4);}

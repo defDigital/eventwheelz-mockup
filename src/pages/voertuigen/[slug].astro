@@ -57,21 +57,23 @@ const galerij = d.galerij.map((b: string) => foto(b)).filter(Boolean);
   </PaginaKop>
 
   <section class="section">
-    <div class="wrap">
-      <div class="detail-tekst">
-        {d.lang.map((alinea: string) => <p data-dummy>{alinea}</p>)}
+    <div class="wrap detail">
+      <div class="detail-hoofd">
+        <div class="detail-tekst">
+          {d.lang.map((alinea: string) => <p data-dummy>{alinea}</p>)}
+        </div>
+
+        {galerij.length > 0 && (
+          <div class:list={['galerij', galerij.length === 1 && 'is-enkel']}>
+            {galerij.map((b) => (
+              <Image src={b!} alt={`${d.naam} van Eventwheelz`} widths={[600, 1000]}
+                     sizes="(max-width:991px) 100vw, 700px" loading="lazy" />
+            ))}
+          </div>
+        )}
       </div>
 
-      {galerij.length > 0 && (
-        <div class:list={['galerij', galerij.length === 1 && 'is-enkel']}>
-          {galerij.map((b) => (
-            <Image src={b!} alt={`${d.naam} van Eventwheelz`} widths={[600, 1000]}
-                   sizes="(max-width:767px) 100vw, 560px" loading="lazy" />
-          ))}
-        </div>
-      )}
-
-      <div class="panelen">
+      <aside class="detail-zij">
         <div class="paneel">
           <h2 class="paneel-kop">Bij de prijs inbegrepen</h2>
           <ul class="inbegrepen-lijst">
@@ -106,9 +108,9 @@ const galerij = d.galerij.map((b: string) => foto(b)).filter(Boolean);
             </dl>
           </div>
         )}
-      </div>
 
-      <a class="button is-primary" href={link(pad, '/contact')}>Offerte aanvragen</a>
+        <a class="button is-primary paneel-cta" href={link(pad, '/contact')}>Offerte aanvragen</a>
+      </aside>
     </div>
   </section>
 
@@ -151,33 +153,19 @@ const galerij = d.galerij.map((b: string) => foto(b)).filter(Boolean);
     background:rgba(8,30,58,.45);
     font-weight:700;color:var(--accent);
   }
+  .detail{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--s-8);align-items:start;}
+
   .detail-tekst{display:flex;flex-direction:column;gap:var(--s-4);max-width:64ch;}
   .detail-tekst p{color:var(--body);}
 
-  .galerij{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:var(--s-4);
-    margin-top:var(--s-6);
-  }
-  .galerij :global(img){
-    width:100%;height:100%;
-    aspect-ratio:4/3;object-fit:cover;
-    border-radius:var(--radius);
-  }
+  .galerij{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--s-4);margin-top:var(--s-6);}
+  .galerij :global(img){width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);}
   /* Eén foto is geen galerij. Die krijgt de breedte van de tekstkolom, zodat
-     hij als illustratie in de tekst leest in plaats van als losse plaat.
-     Vanaf twee foto's is een rij wel een bewuste compositie en mag hij breed. */
+     hij als illustratie in de tekst leest in plaats van als losse plaat. */
   .galerij.is-enkel{grid-template-columns:1fr;max-width:64ch;}
   .galerij.is-enkel :global(img){height:auto;aspect-ratio:auto;}
 
-  .panelen{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:var(--s-4);
-    margin-top:var(--s-7);
-    align-items:start;
-  }
+  .detail-zij{display:flex;flex-direction:column;gap:var(--s-4);position:sticky;top:110px;}
   .paneel{background:var(--band-bg);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s-5);}
   .paneel-kop{font-size:1.05rem;margin-bottom:var(--s-4);}
   .specs{margin:0;}
@@ -197,7 +185,11 @@ const galerij = d.galerij.map((b: string) => foto(b)).filter(Boolean);
     color:var(--white);text-decoration:none;font-weight:700;font-size:.85rem;
   }
   .chip:hover{border-color:var(--accent);color:var(--accent);}
-  .button{margin-top:var(--s-6);}
+  .paneel-cta{width:100%;}
 
+  @media (max-width:991px){
+    .detail{grid-template-columns:1fr;gap:var(--s-6);}
+    .detail-zij{position:static;}
+  }
   @media (max-width:767px){ .galerij{grid-template-columns:1fr;} }
 </style>

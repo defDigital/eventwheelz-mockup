@@ -52,8 +52,10 @@ const beeld = foto(d.hoofdfoto);
     <Stappen titel={`Zo zetten we ${d.naam.toLowerCase()} in`} stappen={d.stappen} />
   )}
 
+  {d.quote && <Quote tekst={d.quote.tekst} naam={d.quote.naam} rol={d.quote.rol} />}
+
   {voertuigen.length > 0 && (
-    <section class="section is-band">
+    <section class="section">
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">Wat je hiervoor inzet</span>
@@ -67,7 +69,7 @@ const beeld = foto(d.hoofdfoto);
   )}
 
   {cases.length > 0 && (
-    <section class="section">
+    <section class="section is-band">
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">Al in beweging bij</span>
@@ -85,8 +87,6 @@ const beeld = foto(d.hoofdfoto);
       </div>
     </section>
   )}
-
-  {d.quote && <Quote tekst={d.quote.tekst} naam={d.quote.naam} rol={d.quote.rol} />}
 
   <CtaBlok huidigPad={pad} />
 </Basis>

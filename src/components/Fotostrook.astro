@@ -1,12 +1,13 @@
 ---
+import { achtergrondKlasse, type Achtergrond } from '../lib/pad';
 import { Image } from 'astro:assets';
 import { foto } from '../lib/beeld';
-interface Props { bestanden: string[]; alt: string; }
-const { bestanden, alt } = Astro.props;
+interface Props { bestanden: string[]; alt: string; achtergrond?: Achtergrond; }
+const { bestanden, alt, achtergrond = 'navy' } = Astro.props;
 const beelden = bestanden.map((b) => foto(b)).filter(Boolean);
 ---
 {beelden.length > 0 && (
-  <section class="section">
+  <section class:list={['section', achtergrondKlasse(achtergrond)]}>
     <div class="wrap">
       <div class:list={['fotostrook', beelden.length === 1 && 'is-enkel', beelden.length === 2 && 'is-2']}>
         {beelden.map((b) => (

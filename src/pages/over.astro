@@ -2,6 +2,7 @@
 import Basis from '../layouts/Basis.astro';
 import PaginaKop from '../components/PaginaKop.astro';
 import Logobalk from '../components/Logobalk.astro';
+import { foto } from '../lib/beeld';
 import CtaBlok from '../components/CtaBlok.astro';
 import Stappen from '../components/Stappen.astro';
 import Cijfers from '../components/Cijfers.astro';
@@ -77,11 +78,18 @@ const vestigingen = [
     </div>
   </section>
 
-  <Stappen titel="Van aanvraag tot ophalen" eyebrow="Hoe het werkt" stappen={stappen} />
+  <Stappen
+    titel="Van aanvraag tot ophalen"
+    eyebrow="Hoe het werkt"
+    stappen={stappen}
+    variant="lijst"
+    achtergrond="navy"
+    beeld={foto('breed-levering-aanhanger.jpg')}
+    beeldAlt="Voertuigen van Eventwheelz worden op locatie geleverd" />
 
   <Cijfers eyebrow="De vloot" titel="Eventwheelz in cijfers" cijfers={cijfers} />
 
-  <Logobalk />
+  <Logobalk achtergrond="navy" />
   <CtaBlok huidigPad={pad} />
 </Basis>
 

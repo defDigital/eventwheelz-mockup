@@ -1,8 +1,9 @@
 ---
-interface Props { titel?: string; eyebrow?: string; cijfers: { getal: string; label: string }[]; }
-const { titel, eyebrow, cijfers } = Astro.props;
+import { achtergrondKlasse, type Achtergrond } from '../lib/pad';
+interface Props { titel?: string; eyebrow?: string; cijfers: { getal: string; label: string achtergrond?: Achtergrond; }[]; }
+const { titel, eyebrow, cijfers, achtergrond = 'deep' } = Astro.props;
 ---
-<section class="section is-band">
+<section class:list={['section', achtergrondKlasse(achtergrond)]}>
   <div class="wrap">
     {(eyebrow || titel) && (
       <div class="section-head">

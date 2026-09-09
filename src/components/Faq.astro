@@ -1,8 +1,9 @@
 ---
-interface Props { titel?: string; vragen: { vraag: string; antwoord: string }[]; }
-const { titel = 'Veelgestelde vragen', vragen } = Astro.props;
+import { achtergrondKlasse, type Achtergrond } from '../lib/pad';
+interface Props { titel?: string; vragen: { vraag: string; antwoord: string achtergrond?: Achtergrond; }[]; }
+const { titel = 'Veelgestelde vragen', vragen, achtergrond = 'navy' } = Astro.props;
 ---
-<section class="section">
+<section class:list={['section', achtergrondKlasse(achtergrond)]}>
   <div class="wrap faq-grid">
     <div class="section-head">
       <span class="eyebrow">Goed om te weten</span>

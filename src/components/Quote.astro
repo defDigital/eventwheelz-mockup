@@ -1,8 +1,9 @@
 ---
-interface Props { tekst: string; naam: string; rol: string; }
-const { tekst, naam, rol } = Astro.props;
+import { achtergrondKlasse, type Achtergrond } from '../lib/pad';
+interface Props { tekst: string; naam: string; rol: string; achtergrond?: Achtergrond; }
+const { tekst, naam, rol, achtergrond = 'blauw' } = Astro.props;
 ---
-<section class="section is-alt">
+<section class:list={['section', achtergrondKlasse(achtergrond)]}>
   <div class="wrap">
     <figure class="quote">
       <blockquote data-dummy>{tekst}</blockquote>

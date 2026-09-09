@@ -27,3 +27,16 @@ export function raster(aantal: number, maximum: 3 | 4 = 4): string {
   const n = Math.min(aantal, maximum);
   return `is-${n}`;
 }
+
+/**
+ * Achtergrond van een sectie. De kleur hoort bij de plek op de pagina, niet
+ * bij het blok zelf: anders lopen twee blokken met dezelfde kleur in elkaar
+ * over zodra ze naast elkaar komen te staan.
+ *
+ * In Webflow wordt dit een achtergrondklasse op de sectie.
+ */
+export type Achtergrond = 'navy' | 'deep' | 'blauw';
+
+export function achtergrondKlasse(a: Achtergrond = 'navy'): string {
+  return a === 'deep' ? 'is-band' : a === 'blauw' ? 'is-alt' : '';
+}
